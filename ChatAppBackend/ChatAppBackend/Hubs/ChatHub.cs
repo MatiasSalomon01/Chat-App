@@ -6,7 +6,8 @@ public class ChatHub : Hub
 {
     public override async Task OnConnectedAsync()
     {
-        await SendMessage("", "User connected!");
+        //await SendMessage("", "User connected!");
+        Console.WriteLine("User connected!");
         await base.OnConnectedAsync();
     }
 
