@@ -1,3 +1,4 @@
+import 'package:chat_app_frontend/models/content.dart';
 import 'package:flutter/material.dart';
 import 'package:signalr_core/signalr_core.dart';
 
@@ -33,8 +34,10 @@ class _HomeState extends State<Home> {
   List<String> messages = [];
   UniqueKey key = UniqueKey();
   bool isChatRoom = false;
+  bool isTyping = false;
   String userName = '';
-  final Map<String, List<String>> content = {};
+  // final Map<String, List<String>> content = {};
+  List<Content> content = [];
   final TextEditingController chatController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
   @override
@@ -51,21 +54,19 @@ class _HomeState extends State<Home> {
     connection.on(
       'ReceiveMessage',
       (arguments) async {
-        print(arguments);
-        for (var data in arguments!) {
-          if (content.containsKey(data["user"])) {
-            var value = data["message"].toString();
-            content[data["user"]] = [...content[data["user"]]!, value];
-          } else {
-            var keyValue = {
-              data["user"].toString(): [data["message"].toString()],
-            };
-            content.addAll(keyValue);
-          }
+        for (var argument in arguments!) {
+          content.add(
+            Content(user: argument["user"], message: argument["message"]),
+          );
         }
         setState(() {});
       },
     );
+    connection.on("ReceiveIsTyping", (arguments) {
+      setState(() {
+        isTyping = arguments!.first as bool;
+      });
+    });
   }
 
   buildConnection() {
@@ -82,6 +83,10 @@ class _HomeState extends State<Home> {
     await connection.invoke('SendAll', args: [userName, message]);
   }
 
+  Future sendIsTyping(bool isTyping) async {
+    await connection.invoke('SendIsTyping', args: [isTyping]);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -91,74 +96,67 @@ class _HomeState extends State<Home> {
           'CHAT - APP',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
+        actions: [
+          if (isTyping) ...[
+            Text("...escribiendo",
+                style: const TextStyle(fontWeight: FontWeight.bold)),
+            const SizedBox(width: 100),
+          ],
+          Text(userName, style: const TextStyle(fontWeight: FontWeight.bold)),
+          const SizedBox(width: 100),
+        ],
       ),
       backgroundColor: const Color.fromARGB(255, 37, 36, 36),
       body: isChatRoom
-          ? Container(
-              margin: const EdgeInsets.all(50),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Container(
-                    margin: const EdgeInsets.only(bottom: 50),
-                    child: Column(
-                      children: [
-                        ...content.keys
-                            .map(
-                              (key) => Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  // if (e != userName)
-                                  //   Text(
-                                  //     e.toString(),
-                                  //     style: const TextStyle(
-                                  //       color: Colors.purple,
-                                  //       fontSize: 14,
-                                  //     ),
-                                  //   ),
-                                  ...content[key]!.map(
-                                    (value) => Align(
-                                      alignment: key != userName
-                                          ? Alignment.bottomLeft
-                                          : Alignment.bottomRight,
-                                      child: Container(
-                                        padding: const EdgeInsets.all(10),
-                                        margin: const EdgeInsets.symmetric(
-                                            vertical: 10),
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(8),
-                                          color: key != userName
-                                              ? const Color.fromARGB(
-                                                  255, 43, 44, 44)
-                                              : const Color.fromARGB(
-                                                  255, 29, 75, 62),
-                                        ),
-                                        child: Text(
-                                          value.toString(),
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
+          ? Column(
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
+                    reverse: true,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 50),
+                      child: Column(
+                        children: [
+                          ...content.map(
+                            (e) => Align(
+                              alignment: e.user != userName
+                                  ? Alignment.bottomLeft
+                                  : Alignment.bottomRight,
+                              child: Container(
+                                padding: const EdgeInsets.all(10),
+                                margin:
+                                    const EdgeInsets.symmetric(vertical: 10),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  color: e.user != userName
+                                      ? const Color.fromARGB(255, 43, 44, 44)
+                                      : const Color.fromARGB(255, 29, 75, 62),
+                                ),
+                                child: Text(
+                                  e.message.toString(),
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
                                   ),
-                                ],
+                                ),
                               ),
-                            )
-                            .toList()
-                      ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                  TextFormField(
+                ),
+                Container(
+                  padding: const EdgeInsets.all(50),
+                  child: TextFormField(
                     controller: chatController,
                     focusNode: _focusNode,
                     style: const TextStyle(color: Colors.white),
                     cursorColor: Colors.grey,
-                    onEditingComplete: () {},
-                    onSaved: (newValue) {},
+                    onChanged: (value) {
+                      sendIsTyping(true);
+                    },
                     onFieldSubmitted: (value) {
                       sendAll(value);
                       chatController.text = '';
@@ -179,9 +177,9 @@ class _HomeState extends State<Home> {
                         borderSide: BorderSide(color: Colors.black, width: .5),
                       ),
                     ),
-                  )
-                ],
-              ),
+                  ),
+                ),
+              ],
             )
           : Center(
               child: Column(
