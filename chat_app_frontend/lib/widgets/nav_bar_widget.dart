@@ -14,18 +14,18 @@ class NavBar extends StatelessWidget {
       color: primary,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
+        children: const [
           NavBarItem(
+            pageIndex: 0,
             title: 'Chats',
-            isSelected: true,
           ),
           NavBarItem(
+            pageIndex: 1,
             title: 'Novedades',
-            isSelected: false,
           ),
           NavBarItem(
+            pageIndex: 2,
             title: 'Llamadas',
-            isSelected: false,
           ),
         ],
       ),

@@ -1,5 +1,7 @@
 import 'package:chat_app_frontend/helpers/sized_box_helper.dart';
+import 'package:chat_app_frontend/providers/nav_bar_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../constants/colors.dart';
 import '../widgets/widgets.dart';
@@ -10,6 +12,8 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final titles = ["Chats", "Novedades", "Llamadas"];
+    final navBarProvider = Provider.of<NavBarProvider>(context);
+
     return Scaffold(
       backgroundColor: secondary,
       appBar: const CustomAppBar(),
@@ -18,6 +22,7 @@ class HomeScreen extends StatelessWidget {
           const NavBar(),
           Expanded(
             child: PageView.builder(
+              onPageChanged: (index) => navBarProvider.currentIndex = index,
               itemBuilder: (context, index) {
                 return Center(
                   child: Text(
