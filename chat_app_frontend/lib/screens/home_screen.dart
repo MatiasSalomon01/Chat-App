@@ -14,6 +14,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final titles = ["Chats", "Novedades", "Llamadas"];
     final navBarProvider = Provider.of<NavBarProvider>(context);
+    // final PageController controller = PageController(initialPage: 0);
 
     return Scaffold(
       backgroundColor: secondary,
@@ -23,6 +24,7 @@ class HomeScreen extends StatelessWidget {
           const NavBar(),
           Expanded(
             child: PageView.builder(
+              controller: navBarProvider.controller,
               onPageChanged: (index) => navBarProvider.currentIndex = index,
               itemBuilder: (context, index) {
                 switch (index) {
@@ -35,12 +37,6 @@ class HomeScreen extends StatelessWidget {
                   default:
                     return const ChatPage();
                 }
-                // return Center(
-                //   child: Text(
-                //     titles[index],
-                //     style: const TextStyle(color: white),
-                //   ),
-                // );
               },
               itemCount: titles.length,
             ),

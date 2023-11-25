@@ -28,7 +28,10 @@ class _NavBarItemState extends State<NavBarItem> {
       return Expanded(
         child: GestureDetector(
           onTapDown: (_) => setState(() => isPressed = true),
-          onTapUp: (_) => setState(() => isPressed = false),
+          onTapUp: (_) {
+            setState(() => isPressed = false);
+            provider.goTo(widget.pageIndex);
+          },
           child: Container(
             height: 50,
             color: isPressed ? white.withOpacity(.1) : transparent,

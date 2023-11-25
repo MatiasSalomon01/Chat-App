@@ -9,4 +9,16 @@ class NavBarProvider extends ChangeNotifier {
     _currentIndex = value;
     notifyListeners();
   }
+
+  final PageController _controller = PageController(initialPage: 0);
+
+  PageController get controller => _controller;
+
+  goTo(int index) {
+    _controller.animateToPage(
+      index,
+      duration: const Duration(milliseconds: 200),
+      curve: Curves.easeInOut,
+    );
+  }
 }
