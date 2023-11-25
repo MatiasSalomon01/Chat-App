@@ -43,6 +43,7 @@ class HomeScreen extends StatelessWidget {
           ),
         ],
       ),
+      floatingActionButton: const CustomFloatinActionButton(),
     );
   }
 }
