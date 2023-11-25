@@ -12,10 +12,11 @@ class ProfilePicture extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var imageUrl = url ?? "https://picsum.photos/200";
     return CircleAvatar(
       backgroundColor: primary,
       radius: 25,
-      backgroundImage: NetworkImage(url ?? "https://picsum.photos/200"),
+      backgroundImage: NetworkImage(imageUrl),
     );
   }
 }

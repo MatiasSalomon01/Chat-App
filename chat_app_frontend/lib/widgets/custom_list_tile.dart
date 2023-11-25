@@ -23,7 +23,10 @@ class CustomListTile extends StatelessWidget {
       padding: calculatePadding(pageIndex, lastIndex),
       child: Row(
         children: [
-          ProfilePicture(url: chat.profilePictureUrl),
+          GestureDetector(
+            onTap: () => showProfilePictureModal(context),
+            child: ProfilePicture(url: chat.profilePictureUrl),
+          ),
           horizontalSpace(12),
           Expanded(
             child: Column(
@@ -74,6 +77,13 @@ class CustomListTile extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  Future<dynamic> showProfilePictureModal(BuildContext context) async {
+    return await showDialog(
+      context: context,
+      builder: (context) => CustomAlertDialog(chat: chat),
     );
   }
 
