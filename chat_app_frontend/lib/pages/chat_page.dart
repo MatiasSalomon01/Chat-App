@@ -10,8 +10,6 @@ class ChatPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Chat> chats = Chat.getMockData();
-
     return NotificationListener<OverscrollIndicatorNotification>(
       onNotification: (notification) {
         notification.disallowIndicator();
@@ -19,12 +17,12 @@ class ChatPage extends StatelessWidget {
       },
       child: ListView.builder(
         shrinkWrap: true,
-        itemCount: chats.length,
+        itemCount: Chat.mockData.length,
         itemBuilder: (context, index) {
           return CustomListTile(
             pageIndex: index,
-            chat: chats[index],
-            lastIndex: chats.length - 1,
+            chat: Chat.mockData[index],
+            lastIndex: Chat.mockData.length - 1,
           );
         },
         // separatorBuilder: (context, index) => verticalSpace(10),
