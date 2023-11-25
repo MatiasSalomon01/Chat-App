@@ -1,11 +1,29 @@
 import 'package:chat_app_frontend/models/content.dart';
+import 'package:chat_app_frontend/providers/nav_bar_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:signalr_core/signalr_core.dart';
 
 import 'screens/screens.dart';
 
 void main() {
-  runApp(const MainApp());
+  runApp(const AppState());
+}
+
+class AppState extends StatelessWidget {
+  const AppState({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => NavBarProvider(),
+        )
+      ],
+      child: const MainApp(),
+    );
+  }
 }
 
 class MainApp extends StatelessWidget {
