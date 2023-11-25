@@ -24,7 +24,6 @@ class _NavBarItemState extends State<NavBarItem> {
   @override
   Widget build(BuildContext context) {
     return Consumer<NavBarProvider>(builder: (context, provider, child) {
-      print(provider.currentIndex);
       bool isSelected = provider.currentIndex == widget.pageIndex;
       return Expanded(
         child: GestureDetector(

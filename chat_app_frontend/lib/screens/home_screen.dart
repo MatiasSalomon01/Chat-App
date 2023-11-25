@@ -1,4 +1,5 @@
 import 'package:chat_app_frontend/helpers/sized_box_helper.dart';
+import 'package:chat_app_frontend/pages/pages.dart';
 import 'package:chat_app_frontend/providers/nav_bar_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -24,12 +25,22 @@ class HomeScreen extends StatelessWidget {
             child: PageView.builder(
               onPageChanged: (index) => navBarProvider.currentIndex = index,
               itemBuilder: (context, index) {
-                return Center(
-                  child: Text(
-                    titles[index],
-                    style: const TextStyle(color: white),
-                  ),
-                );
+                switch (index) {
+                  case 0:
+                    return const ChatPage();
+                  case 1:
+                    return Container();
+                  case 2:
+                    return Container();
+                  default:
+                    return const ChatPage();
+                }
+                // return Center(
+                //   child: Text(
+                //     titles[index],
+                //     style: const TextStyle(color: white),
+                //   ),
+                // );
               },
               itemCount: titles.length,
             ),
