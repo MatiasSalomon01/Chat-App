@@ -23,9 +23,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                     const Text(
                       'WhatsApp',
                       style: TextStyle(
-                          color: white,
-                          fontSize: 22,
-                          fontWeight: FontWeight.w500),
+                        color: white,
+                        fontSize: 22,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                     const Spacer(),
                     const Icon(

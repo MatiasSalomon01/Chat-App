@@ -35,7 +35,11 @@ class CustomListTile extends StatelessWidget {
                   children: [
                     Text(
                       chat.name,
-                      style: const TextStyle(color: white, fontSize: 17),
+                      style: const TextStyle(
+                        color: white,
+                        fontSize: 17,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                     Text(
                       formatedDate(chat.date),

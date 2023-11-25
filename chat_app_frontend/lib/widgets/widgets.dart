@@ -1,3 +1,4 @@
+export 'package:chat_app_frontend/widgets/custom_list_tile_story.dart';
 export 'package:chat_app_frontend/widgets/custom_list_tile.dart';
 export 'package:chat_app_frontend/widgets/profile_picture.dart';
 export 'package:chat_app_frontend/widgets/custom_floating_action_button.dart';

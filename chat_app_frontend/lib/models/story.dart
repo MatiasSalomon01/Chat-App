@@ -13,7 +13,7 @@ class Story {
 
   static List<Story> mockData = [
     Story(
-      title: "Matias Salomon",
+      title: "Mi estado",
       subtitle: "Añade una actualización",
       profilePictureUrl: "https://picsum.photos/200",
       totalStories: 0,
@@ -21,25 +21,25 @@ class Story {
     Story(
       title: "Titulo 1",
       subtitle: "hace 25 minutos",
-      profilePictureUrl: "https://picsum.photos/200",
+      profilePictureUrl: "https://picsum.photos/201",
       totalStories: 2,
     ),
     Story(
       title: "Titulo 2",
       subtitle: "11:54",
-      profilePictureUrl: "https://picsum.photos/200",
+      profilePictureUrl: "https://picsum.photos/202",
       totalStories: 1,
     ),
     Story(
-      title: "03:56",
-      subtitle: "Añade una actualización",
-      profilePictureUrl: "https://picsum.photos/200",
+      title: "Titulo 3",
+      subtitle: "03:56",
+      profilePictureUrl: "https://picsum.photos/203",
       totalStories: 4,
     ),
     Story(
-      title: "T15:32",
-      subtitle: "Añade una actualización",
-      profilePictureUrl: "https://picsum.photos/200",
+      title: "Titulo 4",
+      subtitle: "15:32",
+      profilePictureUrl: "https://picsum.photos/204",
       totalStories: 3,
     )
   ];
