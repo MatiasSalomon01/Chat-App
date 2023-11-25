@@ -1,7 +1,9 @@
 import 'package:chat_app_frontend/helpers/sized_box_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 import '../constants/colors.dart';
+import 'widgets.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBar({super.key});
@@ -41,11 +43,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                       size: 25,
                     ),
                     horizontalSpace(15),
-                    const Icon(
-                      Icons.more_vert,
-                      color: white,
-                      size: 25,
-                    )
+                    const MoreButton(),
                   ],
                 ),
               ],
