@@ -14,6 +14,8 @@ class CustomAlertDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      elevation: 0,
+      shape: const OutlineInputBorder(borderSide: BorderSide(width: 0)),
       alignment: Alignment.topCenter,
       contentPadding: EdgeInsets.zero,
       shadowColor: transparent,
