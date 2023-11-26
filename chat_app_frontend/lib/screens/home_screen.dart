@@ -33,9 +33,7 @@ class HomeScreen extends StatelessWidget {
                   case 1:
                     return const NewsPage();
                   case 2:
-                    return Container();
-                  default:
-                    return const ChatPage();
+                    return const CallsPage();
                 }
               },
               itemCount: titles.length,

@@ -11,11 +11,15 @@ class CustomListTileStory extends StatelessWidget {
     required this.story,
     this.isMe = false,
     required this.padding,
+    this.showButton = true,
+    this.customAvatar,
   });
 
   final Story story;
   final bool isMe;
   final EdgeInsets padding;
+  final bool showButton;
+  final Widget? customAvatar;
 
   @override
   Widget build(BuildContext context) {
@@ -42,25 +46,29 @@ class CustomListTileStory extends StatelessWidget {
           else
             Stack(
               children: [
-                ProfilePicture(url: story.profilePictureUrl),
-                Positioned(
-                  bottom: 0,
-                  right: 0,
-                  child: Container(
-                    height: 22,
-                    width: 22,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: const Color(0xff00a884),
-                      border: Border.all(color: secondary, width: 1.5),
-                    ),
-                    child: const Icon(
-                      Icons.add,
-                      color: white,
-                      size: 19,
+                if (customAvatar == null)
+                  ProfilePicture(url: story.profilePictureUrl)
+                else
+                  customAvatar!,
+                if (showButton)
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: Container(
+                      height: 22,
+                      width: 22,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: const Color(0xff00a884),
+                        border: Border.all(color: secondary, width: 1.5),
+                      ),
+                      child: const Icon(
+                        Icons.add,
+                        color: white,
+                        size: 19,
+                      ),
                     ),
                   ),
-                ),
               ],
             ),
           horizontalSpace(12),
