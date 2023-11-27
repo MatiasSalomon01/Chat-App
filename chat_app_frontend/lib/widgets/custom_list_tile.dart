@@ -5,7 +5,7 @@ import '../constants/colors.dart';
 import '../helpers/sized_box_helper.dart';
 import '../models/models.dart';
 
-class CustomListTile extends StatelessWidget {
+class CustomListTile extends StatefulWidget {
   const CustomListTile({
     super.key,
     required this.pageIndex,
@@ -18,64 +18,80 @@ class CustomListTile extends StatelessWidget {
   final Chat chat;
 
   @override
+  State<CustomListTile> createState() => _CustomListTileState();
+}
+
+class _CustomListTileState extends State<CustomListTile> {
+  bool isPressed = false;
+
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: calculatePadding(pageIndex, lastIndex),
-      child: Row(
-        children: [
-          GestureDetector(
-            onTap: () => showProfilePictureModal(context),
-            child: ProfilePicture(url: chat.profilePictureUrl),
-          ),
-          horizontalSpace(12),
-          Expanded(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Material(
+      color: secondary,
+      child: InkWell(
+        splashFactory: InkRipple.splashFactory,
+        overlayColor: MaterialStateProperty.all(hoverColor),
+        onTap: () {},
+        child: Container(
+          padding: calculatePadding(widget.pageIndex, widget.lastIndex),
+          color: isPressed ? hoverColor : transparent,
+          child: Row(
+            children: [
+              GestureDetector(
+                onTap: () => showProfilePictureModal(context),
+                child: ProfilePicture(url: widget.chat.profilePictureUrl),
+              ),
+              horizontalSpace(12),
+              Expanded(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      chat.name,
-                      style: const TextStyle(
-                        color: white,
-                        fontSize: 17,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    Text(
-                      formatedDate(chat.date),
-                      style: const TextStyle(color: grey, fontSize: 13),
-                    ),
-                  ],
-                ),
-                verticalSpace(5),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Text(
-                        chat.lastMessage,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(color: grey, fontSize: 14),
-                      ),
-                    ),
-                    if (chat.isFixed)
-                      Transform.rotate(
-                        angle: .5,
-                        child: const Icon(
-                          Icons.push_pin_rounded,
-                          color: grey,
-                          size: 20,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          widget.chat.name,
+                          style: const TextStyle(
+                            color: white,
+                            fontSize: 17,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
-                      )
+                        Text(
+                          formatedDate(widget.chat.date),
+                          style: const TextStyle(color: grey, fontSize: 13),
+                        ),
+                      ],
+                    ),
+                    verticalSpace(5),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            widget.chat.lastMessage,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(color: grey, fontSize: 14),
+                          ),
+                        ),
+                        if (widget.chat.isFixed)
+                          Transform.rotate(
+                            angle: .5,
+                            child: const Icon(
+                              Icons.push_pin_rounded,
+                              color: grey,
+                              size: 20,
+                            ),
+                          )
+                      ],
+                    ),
                   ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
@@ -83,7 +99,7 @@ class CustomListTile extends StatelessWidget {
   Future<dynamic> showProfilePictureModal(BuildContext context) async {
     return await showDialog(
       context: context,
-      builder: (context) => CustomAlertDialog(chat: chat),
+      builder: (context) => CustomAlertDialog(chat: widget.chat),
     );
   }
 

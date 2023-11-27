@@ -34,7 +34,7 @@ class _NavBarItemState extends State<NavBarItem> {
           },
           child: Container(
             height: 50,
-            color: isPressed ? white.withOpacity(.1) : transparent,
+            color: isPressed ? hoverColor : transparent,
             padding: const EdgeInsets.only(top: 13.5),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
