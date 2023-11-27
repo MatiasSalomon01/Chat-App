@@ -1,6 +1,5 @@
 import 'package:chat_app_frontend/helpers/sized_box_helper.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 
 import '../constants/colors.dart';
 import 'widgets.dart';

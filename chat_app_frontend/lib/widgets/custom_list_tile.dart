@@ -1,3 +1,4 @@
+import 'package:chat_app_frontend/screens/chat_screen.dart';
 import 'package:chat_app_frontend/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
@@ -31,7 +32,12 @@ class _CustomListTileState extends State<CustomListTile> {
       child: InkWell(
         splashFactory: InkRipple.splashFactory,
         overlayColor: MaterialStateProperty.all(hoverColor),
-        onTap: () {},
+        onTap: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ChatScreen(chat: widget.chat),
+          ),
+        ),
         child: Container(
           padding: calculatePadding(widget.pageIndex, widget.lastIndex),
           color: isPressed ? hoverColor : transparent,

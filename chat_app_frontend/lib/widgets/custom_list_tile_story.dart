@@ -32,7 +32,7 @@ class CustomListTileStory extends StatelessWidget {
               decoration: BoxDecoration(
                 color: green,
                 shape: BoxShape.circle,
-                border: Border.all(color: const Color(0xff25a663), width: 2),
+                border: Border.all(color: greenAccent2, width: 2),
               ),
               child: Container(
                 decoration: BoxDecoration(
@@ -59,7 +59,7 @@ class CustomListTileStory extends StatelessWidget {
                       width: 22,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: const Color(0xff00a884),
+                        color: greenAccent3,
                         border: Border.all(color: secondary, width: 1.5),
                       ),
                       child: const Icon(

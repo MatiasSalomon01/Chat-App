@@ -1,3 +1,4 @@
+export 'package:chat_app_frontend/widgets/custom_app_bar_chat_widget.dart';
 export 'package:chat_app_frontend/widgets/custom_list_tile_call.dart';
 export 'package:chat_app_frontend/widgets/custom_alert_dialog.dart';
 export 'package:chat_app_frontend/widgets/more_button.dart';
