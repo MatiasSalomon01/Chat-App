@@ -22,12 +22,34 @@ class _ChatScreenState extends State<ChatScreen> {
     super.initState();
 
     hub = HubConnectionBuilder().withUrl(serverUrl).build();
+    hub.onclose((exception) => onClosed);
+    hub.on(
+      'ReceiveMessage',
+      (arguments) async {
+        for (var argument in arguments!) {
+          content.add(
+            Content(user: argument["user"], message: argument["message"]),
+          );
+        }
+        setState(() {});
+      },
+    );
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
+  }
+
+  void onClosed(Exception exception) => print('connection closed');
+
+  Future connect() async {
+    await hub.start();
+  }
+
+  Future sendAll(String message) async {
+    await hub.invoke('SendAll', args: [userName, message]);
   }
 
   @override
