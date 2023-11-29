@@ -3,10 +3,32 @@ import 'package:chat_app_frontend/helpers/sized_box_helper.dart';
 import 'package:chat_app_frontend/models/models.dart';
 import 'package:chat_app_frontend/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:signalr_core/signalr_core.dart';
 
-class ChatScreen extends StatelessWidget {
+class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key, required this.chat});
   final Chat chat;
+
+  @override
+  State<ChatScreen> createState() => _ChatScreenState();
+}
+
+class _ChatScreenState extends State<ChatScreen> {
+  final String serverUrl = 'http://10.0.2.2:5003/chat-hub';
+  late final HubConnection hub;
+
+  @override
+  void initState() {
+    super.initState();
+
+    hub = HubConnectionBuilder().withUrl(serverUrl).build();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,89 +55,100 @@ class ChatScreen extends StatelessWidget {
       MockDataChat(text: "ASdasgfhfghdasdsa", isMe: false, putSeperator: true),
     ];
     final size = MediaQuery.of(context).size;
+
     return Scaffold(
       backgroundColor: secondary,
-      appBar: CustomAppBarChat(chat: chat),
+      appBar: CustomAppBarChat(chat: widget.chat),
       body: Stack(
         children: [
           Column(
             children: [
-              Expanded(
-                child: NotificationListener<OverscrollIndicatorNotification>(
-                  onNotification: (notification) {
-                    notification.disallowIndicator();
-                    return false;
-                  },
-                  child: SingleChildScrollView(
-                    reverse: true,
-                    child: Column(
-                      children: [
-                        verticalSpace(5),
-                        ...List.generate(
-                          messages.length,
-                          (index) => Container(
-                            margin: messages[index].isMe
-                                ? const EdgeInsets.only(left: 50)
-                                : const EdgeInsets.only(right: 50),
-                            child: Column(
-                              children: [
-                                Align(
-                                  alignment: messages[index].isMe
-                                      ? Alignment.centerRight
-                                      : Alignment.centerLeft,
-                                  child: Container(
-                                    margin: const EdgeInsets.symmetric(
-                                      horizontal: 8,
-                                      vertical: 2,
-                                    ),
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 10,
-                                      vertical: 5,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: messages[index].isMe
-                                          ? userGreen
-                                          : primary,
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Text(
-                                          messages[index].text,
-                                          style: const TextStyle(color: white),
-                                        ),
-                                        horizontalSpace(10),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(top: 10),
-                                          child: Text(
-                                            "23:18",
-                                            style: TextStyle(
-                                              color: white.withOpacity(.6),
-                                              fontSize: 12,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                if (messages[index].putSeperator)
-                                  verticalSpace(5)
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
+              ChatMessages(messages: messages),
               const TextFieldAndFloatingButton()
             ],
           ),
         ],
+      ),
+    );
+  }
+}
+
+class ChatMessages extends StatelessWidget {
+  const ChatMessages({
+    super.key,
+    required this.messages,
+  });
+
+  final List<MockDataChat> messages;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: NotificationListener<OverscrollIndicatorNotification>(
+        onNotification: (notification) {
+          notification.disallowIndicator();
+          return false;
+        },
+        child: SingleChildScrollView(
+          reverse: true,
+          child: Column(
+            children: [
+              verticalSpace(5),
+              ...List.generate(
+                messages.length,
+                (index) => Container(
+                  margin: messages[index].isMe
+                      ? const EdgeInsets.only(left: 50)
+                      : const EdgeInsets.only(right: 50),
+                  child: Column(
+                    children: [
+                      Align(
+                        alignment: messages[index].isMe
+                            ? Alignment.centerRight
+                            : Alignment.centerLeft,
+                        child: Container(
+                          margin: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 2,
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 5,
+                          ),
+                          decoration: BoxDecoration(
+                            color: messages[index].isMe ? userGreen : primary,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                messages[index].text,
+                                style: const TextStyle(color: white),
+                              ),
+                              horizontalSpace(10),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 10),
+                                child: Text(
+                                  "23:18",
+                                  style: TextStyle(
+                                    color: white.withOpacity(.6),
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      if (messages[index].putSeperator) verticalSpace(5)
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
