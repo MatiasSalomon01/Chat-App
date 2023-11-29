@@ -1,9 +1,17 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using ChatAppBackend.Interfaces;
+using Microsoft.AspNetCore.SignalR;
 
 namespace ChatAppBackend.Hubs;
 
 public class ChatHub : Hub
 {
+    private readonly IMessageRepository _repository;
+
+    public ChatHub(IMessageRepository repository)
+    {
+        _repository = repository;
+    }
+
     public override async Task OnConnectedAsync()
     {
         Console.WriteLine("User connected!");
