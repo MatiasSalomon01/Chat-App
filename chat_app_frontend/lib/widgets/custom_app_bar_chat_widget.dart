@@ -8,7 +8,7 @@ import 'widgets.dart';
 class CustomAppBarChat extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBarChat({super.key, required this.chat});
   final Chat chat;
-
+  final double appBarHeight = kToolbarHeight;
   @override
   Widget build(BuildContext context) {
     return PreferredSize(
@@ -16,7 +16,7 @@ class CustomAppBarChat extends StatelessWidget implements PreferredSizeWidget {
       child: SafeArea(
         child: Container(
           color: primary,
-          height: kTextTabBarHeight,
+          height: appBarHeight,
           width: MediaQuery.of(context).size.width,
           child: Row(
             children: [
@@ -66,5 +66,5 @@ class CustomAppBarChat extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => Size.fromHeight(appBarHeight);
 }
