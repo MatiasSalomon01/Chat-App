@@ -3,6 +3,7 @@
     public class UsersMessages
     {
         public int Id { get; set; }
+        public int ChatId { get; set; }
         public int FromUserId { get; set; }
         public User FromUser{ get; set; }
         public int MessageId { get; set; }

@@ -3,6 +3,7 @@ using System;
 using ChatAppBackend.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ChatAppBackend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231129015238_nullProperties")]
+    partial class nullProperties
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -69,29 +72,6 @@ namespace ChatAppBackend.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("ChatAppBackend.Entities.UserChat", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("UserContactId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserContactId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserChats");
-                });
-
             modelBuilder.Entity("ChatAppBackend.Entities.UsersMessages", b =>
                 {
                     b.Property<int>("Id")
@@ -99,9 +79,6 @@ namespace ChatAppBackend.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ChatId")
-                        .HasColumnType("integer");
 
                     b.Property<int>("FromUserId")
                         .HasColumnType("integer");
@@ -121,25 +98,6 @@ namespace ChatAppBackend.Migrations
                     b.HasIndex("ToUserId");
 
                     b.ToTable("UsersMessages");
-                });
-
-            modelBuilder.Entity("ChatAppBackend.Entities.UserChat", b =>
-                {
-                    b.HasOne("ChatAppBackend.Entities.User", "UserContact")
-                        .WithMany()
-                        .HasForeignKey("UserContactId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ChatAppBackend.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-
-                    b.Navigation("UserContact");
                 });
 
             modelBuilder.Entity("ChatAppBackend.Entities.UsersMessages", b =>
