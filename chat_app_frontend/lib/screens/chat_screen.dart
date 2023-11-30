@@ -1,55 +1,27 @@
 import 'package:chat_app_frontend/constants/colors.dart';
 import 'package:chat_app_frontend/helpers/sized_box_helper.dart';
 import 'package:chat_app_frontend/models/models.dart';
+import 'package:chat_app_frontend/models/user.dart';
 import 'package:chat_app_frontend/widgets/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:signalr_core/signalr_core.dart';
 
 class ChatScreen extends StatefulWidget {
-  const ChatScreen({super.key, required this.chat});
-  final Chat chat;
+  const ChatScreen({super.key, required this.user});
+  final User user;
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  final String serverUrl = 'http://10.0.2.2:5003/chat-hub';
-  late final HubConnection hub;
-
   @override
   void initState() {
     super.initState();
-
-    hub = HubConnectionBuilder().withUrl(serverUrl).build();
-    hub.onclose((exception) => onClosed);
-    hub.on(
-      'ReceiveMessage',
-      (arguments) async {
-        for (var argument in arguments!) {
-          content.add(
-            Content(user: argument["user"], message: argument["message"]),
-          );
-        }
-        setState(() {});
-      },
-    );
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
-  }
-
-  void onClosed(Exception exception) => print('connection closed');
-
-  Future connect() async {
-    await hub.start();
-  }
-
-  Future sendAll(String message) async {
-    await hub.invoke('SendAll', args: [userName, message]);
   }
 
   @override
@@ -80,7 +52,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
     return Scaffold(
       backgroundColor: secondary,
-      appBar: CustomAppBarChat(chat: widget.chat),
+      appBar: CustomAppBarChat(user: widget.user),
       body: Stack(
         children: [
           Column(

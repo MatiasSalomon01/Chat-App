@@ -1,4 +1,5 @@
 import 'package:chat_app_frontend/helpers/sized_box_helper.dart';
+import 'package:chat_app_frontend/models/user.dart';
 import 'package:flutter/material.dart';
 
 import '../constants/colors.dart';
@@ -6,8 +7,8 @@ import '../models/models.dart';
 import 'widgets.dart';
 
 class CustomAppBarChat extends StatelessWidget implements PreferredSizeWidget {
-  const CustomAppBarChat({super.key, required this.chat});
-  final Chat chat;
+  const CustomAppBarChat({super.key, required this.user});
+  final User user;
   final double appBarHeight = kToolbarHeight;
   @override
   Widget build(BuildContext context) {
@@ -33,7 +34,7 @@ class CustomAppBarChat extends StatelessWidget implements PreferredSizeWidget {
                             const Icon(Icons.arrow_back_outlined, color: white),
                             horizontalSpace(2),
                             ProfilePicture(
-                              url: chat.profilePictureUrl,
+                              url: user.profilePictureUrl,
                               radius: 17,
                             ),
                           ],
@@ -42,7 +43,7 @@ class CustomAppBarChat extends StatelessWidget implements PreferredSizeWidget {
                     ),
                     horizontalSpace(10),
                     Text(
-                      chat.name,
+                      user.name,
                       style: const TextStyle(color: white, fontSize: 17),
                     ),
                   ],
