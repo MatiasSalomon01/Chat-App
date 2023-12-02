@@ -78,6 +78,8 @@ class _TextFieldAndFloatingButtonState
               onFieldSubmitted: (value) {
                 Provider.of<SupabaseProvider>(context, listen: false)
                     .sendMessage(value, myId, widget.receiverId);
+
+                _controller.clear();
               },
             ),
           ),

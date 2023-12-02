@@ -21,25 +21,45 @@ class SupabaseProvider extends ChangeNotifier {
     print('****************** - GET MESSAGES -');
     List<Message> messages = [];
 
-    List<dynamic> response = await supabase
+    final List<dynamic> response = await supabase
         .from('Messages')
         .select()
         .eq('sender_id', senderId)
         .eq('receiver_id', receiverId);
 
-    var response2 = await supabase
+    final List<dynamic> response2 = await supabase
         .from('Messages')
         .select()
         .eq('sender_id', receiverId)
         .eq('receiver_id', senderId);
 
+    //Unir las listas
     response.addAll(response2);
 
+    //Mapear
     for (var item in response) {
       Message message = Message.fromMap(item);
       messages.add(message);
     }
 
+    //Agregar separador para espaciado de mensajes
+    int previousId = 0;
+    for (var message in messages) {
+      if (previousId == 0) {
+        previousId = message.senderId;
+        continue;
+      }
+
+      if (message.senderId == previousId) {
+        message.putSeparator = false;
+        previousId = message.senderId;
+      } else {
+        message.putSeparator = true;
+        previousId = message.senderId;
+      }
+    }
+
+    //Ordenar por fecha
     messages.sort((a, b) => a.createdAt.compareTo(b.createdAt));
 
     return messages;
@@ -52,7 +72,6 @@ class SupabaseProvider extends ChangeNotifier {
       'created_at': DateTime.now().toIso8601String(),
       'sender_id': senderId,
       'receiver_id': receiverId,
-      'put_separator': false,
     });
   }
 }

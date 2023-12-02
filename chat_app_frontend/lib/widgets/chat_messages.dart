@@ -58,12 +58,14 @@ class _ChatMessagesState extends State<ChatMessages> {
 
                   var messages = snapshot.data!;
                   if (messages.isEmpty) return Container();
-
+                  int itemCount = messages.length;
                   return ListView.builder(
                     shrinkWrap: true,
-                    itemCount: messages.length,
+                    itemCount: itemCount,
                     itemBuilder: (context, index) {
-                      var isMe = messages[index].senderId == myId;
+                      final Message message = messages[index];
+                      bool isMe = message.senderId == myId;
+
                       return Container(
                         margin: isMe
                             ? const EdgeInsets.only(left: 50)
@@ -91,14 +93,14 @@ class _ChatMessagesState extends State<ChatMessages> {
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     Text(
-                                      messages[index].text,
+                                      message.text,
                                       style: const TextStyle(color: white),
                                     ),
                                     horizontalSpace(10),
                                     Padding(
                                       padding: const EdgeInsets.only(top: 10),
                                       child: Text(
-                                        messages[index].createdAt.getHour(),
+                                        message.createdAt.getHour(),
                                         style: TextStyle(
                                           color: white.withOpacity(.6),
                                           fontSize: 12,
@@ -109,7 +111,7 @@ class _ChatMessagesState extends State<ChatMessages> {
                                 ),
                               ),
                             ),
-                            if (isMe) verticalSpace(5)
+                            if (message.putSeparator) verticalSpace(8),
                           ],
                         ),
                       );
