@@ -18,13 +18,15 @@ class ChatMessages extends StatefulWidget {
 }
 
 class _ChatMessagesState extends State<ChatMessages> {
-  late final Future<List<Message>> futureMessages;
+  // late final Future<List<Message>> futureMessages;
+  late Stream<dynamic> streamMessages;
   List<Message> messages = [];
 
   @override
   void initState() {
     super.initState();
-    getMessages();
+    // getMessages();
+    getStreamMessages();
   }
 
   @override
@@ -32,9 +34,14 @@ class _ChatMessagesState extends State<ChatMessages> {
     super.dispose();
   }
 
-  void getMessages() {
-    futureMessages = Provider.of<SupabaseProvider>(context, listen: false)
-        .getMessages(myId, widget.receiverId);
+  // void getMessages() {
+  //   futureMessages = Provider.of<SupabaseProvider>(context, listen: false)
+  //       .getMessages(myId, widget.receiverId);
+  // }
+
+  void getStreamMessages() {
+    streamMessages = Provider.of<SupabaseProvider>(context, listen: false)
+        .getStreamMessages(myId, widget.receiverId);
   }
 
   @override
@@ -49,8 +56,9 @@ class _ChatMessagesState extends State<ChatMessages> {
           reverse: true,
           child: Column(
             children: [
-              FutureBuilder(
-                future: futureMessages,
+              verticalSpace(5),
+              StreamBuilder(
+                stream: streamMessages,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(
@@ -58,11 +66,24 @@ class _ChatMessagesState extends State<ChatMessages> {
                     );
                   }
 
-                  messages = snapshot.data!;
+                  messages = (snapshot.data! as List<dynamic>)
+                      .map((item) => Message.fromMap(item))
+                      .where((message) =>
+                          (message.senderId == myId &&
+                              message.receiverId == widget.receiverId) ||
+                          (message.senderId == widget.receiverId &&
+                              message.receiverId == myId))
+                      .toList();
+
+                  messages =
+                      Provider.of<SupabaseProvider>(context, listen: false)
+                          .putSeparators(messages);
+
                   if (messages.isEmpty) return Container();
                   int itemCount = messages.length;
 
                   return ListView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     itemCount: itemCount,
                     itemBuilder: (context, index) {

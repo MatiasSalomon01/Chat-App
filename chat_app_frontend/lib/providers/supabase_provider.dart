@@ -29,6 +29,26 @@ class SupabaseProvider extends ChangeNotifier {
             .map((item) => Message.fromMap(item))
             .toList());
 
+    return putSeparators(messages);
+  }
+
+  Future<void> sendMessage(String text, int senderId, int receiverId) async {
+    print('****************** - SEND MESSAGE -');
+    await supabase.from('Messages').insert({
+      'text': text,
+      'created_at': DateTime.now().toIso8601String(),
+      'sender_id': senderId,
+      'receiver_id': receiverId,
+    });
+  }
+
+  Stream getStreamMessages(int senderId, int receiverId) {
+    return supabase
+        .from('Messages')
+        .stream(primaryKey: ['id']).order('created_at', ascending: true);
+  }
+
+  List<Message> putSeparators(List<Message> messages) {
     //Agregar separador para espaciado de mensajes
     int previousId = 0;
     for (var message in messages) {
@@ -47,15 +67,5 @@ class SupabaseProvider extends ChangeNotifier {
     }
 
     return messages;
-  }
-
-  Future<void> sendMessage(String text, int senderId, int receiverId) async {
-    print('****************** - SEND MESSAGE -');
-    await supabase.from('Messages').insert({
-      'text': text,
-      'created_at': DateTime.now().toIso8601String(),
-      'sender_id': senderId,
-      'receiver_id': receiverId,
-    });
   }
 }
