@@ -23,23 +23,11 @@ class SupabaseProvider extends ChangeNotifier {
     final List<Message> messages = await supabase
         .from('Messages')
         .select()
-        .eq('sender_id', senderId)
-        .eq('receiver_id', receiverId)
+        .or('sender_id.eq.$senderId,sender_id.eq.$receiverId')
+        .order('created_at', ascending: true)
         .withConverter((data) => (data as List<dynamic>)
             .map((item) => Message.fromMap(item))
             .toList());
-
-    final List<Message> receiverMessages = await supabase
-        .from('Messages')
-        .select()
-        .eq('sender_id', receiverId)
-        .eq('receiver_id', senderId)
-        .withConverter((data) => (data as List<dynamic>)
-            .map((item) => Message.fromMap(item))
-            .toList());
-
-    //Unir las listas
-    messages.addAll(receiverMessages);
 
     //Agregar separador para espaciado de mensajes
     int previousId = 0;
@@ -51,15 +39,12 @@ class SupabaseProvider extends ChangeNotifier {
 
       if (message.senderId == previousId) {
         message.putSeparator = false;
-        previousId = message.senderId;
       } else {
         message.putSeparator = true;
-        previousId = message.senderId;
       }
-    }
 
-    //Ordenar por fecha
-    messages.sort((a, b) => a.createdAt.compareTo(b.createdAt));
+      previousId = message.senderId;
+    }
 
     return messages;
   }

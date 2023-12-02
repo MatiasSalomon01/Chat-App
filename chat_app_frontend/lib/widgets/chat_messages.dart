@@ -19,15 +19,12 @@ class ChatMessages extends StatefulWidget {
 
 class _ChatMessagesState extends State<ChatMessages> {
   late final Future<List<Message>> futureMessages;
+  List<Message> messages = [];
 
   @override
   void initState() {
     super.initState();
     getMessages();
-
-    // supabase
-    //   .from('Messages')
-    //   .
   }
 
   @override
@@ -61,7 +58,7 @@ class _ChatMessagesState extends State<ChatMessages> {
                     );
                   }
 
-                  var messages = snapshot.data!;
+                  messages = snapshot.data!;
                   if (messages.isEmpty) return Container();
                   int itemCount = messages.length;
 
@@ -78,6 +75,7 @@ class _ChatMessagesState extends State<ChatMessages> {
                             : const EdgeInsets.only(right: 50),
                         child: Column(
                           children: [
+                            if (message.putSeparator) verticalSpace(8),
                             Align(
                               alignment: isMe
                                   ? Alignment.centerRight
@@ -117,7 +115,6 @@ class _ChatMessagesState extends State<ChatMessages> {
                                 ),
                               ),
                             ),
-                            if (message.putSeparator) verticalSpace(8),
                           ],
                         ),
                       );

@@ -1,5 +1,4 @@
 import 'package:chat_app_frontend/constants/supabase.dart';
-import 'package:chat_app_frontend/models/content.dart';
 import 'package:chat_app_frontend/providers/nav_bar_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
