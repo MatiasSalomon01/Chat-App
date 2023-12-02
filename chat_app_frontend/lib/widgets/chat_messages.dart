@@ -19,10 +19,15 @@ class ChatMessages extends StatefulWidget {
 
 class _ChatMessagesState extends State<ChatMessages> {
   late final Future<List<Message>> futureMessages;
+
   @override
   void initState() {
     super.initState();
     getMessages();
+
+    // supabase
+    //   .from('Messages')
+    //   .
   }
 
   @override
@@ -59,6 +64,7 @@ class _ChatMessagesState extends State<ChatMessages> {
                   var messages = snapshot.data!;
                   if (messages.isEmpty) return Container();
                   int itemCount = messages.length;
+
                   return ListView.builder(
                     shrinkWrap: true,
                     itemCount: itemCount,

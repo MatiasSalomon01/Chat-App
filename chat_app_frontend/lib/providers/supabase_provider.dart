@@ -19,28 +19,27 @@ class SupabaseProvider extends ChangeNotifier {
 
   Future<List<Message>> getMessages(int senderId, int receiverId) async {
     print('****************** - GET MESSAGES -');
-    List<Message> messages = [];
 
-    final List<dynamic> response = await supabase
+    final List<Message> messages = await supabase
         .from('Messages')
         .select()
         .eq('sender_id', senderId)
-        .eq('receiver_id', receiverId);
+        .eq('receiver_id', receiverId)
+        .withConverter((data) => (data as List<dynamic>)
+            .map((item) => Message.fromMap(item))
+            .toList());
 
-    final List<dynamic> response2 = await supabase
+    final List<Message> receiverMessages = await supabase
         .from('Messages')
         .select()
         .eq('sender_id', receiverId)
-        .eq('receiver_id', senderId);
+        .eq('receiver_id', senderId)
+        .withConverter((data) => (data as List<dynamic>)
+            .map((item) => Message.fromMap(item))
+            .toList());
 
     //Unir las listas
-    response.addAll(response2);
-
-    //Mapear
-    for (var item in response) {
-      Message message = Message.fromMap(item);
-      messages.add(message);
-    }
+    messages.addAll(receiverMessages);
 
     //Agregar separador para espaciado de mensajes
     int previousId = 0;
