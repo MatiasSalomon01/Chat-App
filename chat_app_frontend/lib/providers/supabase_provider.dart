@@ -1,3 +1,4 @@
+import 'package:chat_app_frontend/models/chat_last_message.dart';
 import 'package:chat_app_frontend/models/models.dart';
 import 'package:flutter/material.dart';
 
@@ -67,5 +68,10 @@ class SupabaseProvider extends ChangeNotifier {
     }
 
     return messages;
+  }
+
+  Future<void> insertLastMessage(ChatLastMessage lastMessage) async {
+    print('****************** - INSERT LAST MESSAGE -');
+    await supabase.from("ChatLastMessage").upsert(lastMessage.toMap());
   }
 }

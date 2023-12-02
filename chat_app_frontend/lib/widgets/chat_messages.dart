@@ -1,4 +1,5 @@
 import 'package:chat_app_frontend/extensions/datime_extensions.dart';
+import 'package:chat_app_frontend/models/chat_last_message.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -21,16 +22,26 @@ class _ChatMessagesState extends State<ChatMessages> {
   // late final Future<List<Message>> futureMessages;
   late Stream<dynamic> streamMessages;
   List<Message> messages = [];
+  late SupabaseProvider provider;
 
   @override
   void initState() {
     super.initState();
+    provider = Provider.of<SupabaseProvider>(context, listen: false);
     // getMessages();
     getStreamMessages();
   }
 
   @override
   void dispose() {
+    final lastMessage = ChatLastMessage(
+      senderId: myId,
+      receiverId: widget.receiverId,
+      text: messages.last.text,
+      date: DateTime.now(),
+    );
+
+    provider.insertLastMessage(lastMessage);
     super.dispose();
   }
 
@@ -40,8 +51,7 @@ class _ChatMessagesState extends State<ChatMessages> {
   // }
 
   void getStreamMessages() {
-    streamMessages = Provider.of<SupabaseProvider>(context, listen: false)
-        .getStreamMessages(myId, widget.receiverId);
+    streamMessages = provider.getStreamMessages(myId, widget.receiverId);
   }
 
   @override
@@ -75,9 +85,7 @@ class _ChatMessagesState extends State<ChatMessages> {
                               message.receiverId == myId))
                       .toList();
 
-                  messages =
-                      Provider.of<SupabaseProvider>(context, listen: false)
-                          .putSeparators(messages);
+                  messages = provider.putSeparators(messages);
 
                   if (messages.isEmpty) return Container();
                   int itemCount = messages.length;
