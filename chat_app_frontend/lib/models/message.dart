@@ -4,7 +4,6 @@ class Message {
   final DateTime createdAt;
   final int senderId;
   final int receiverId;
-  final bool putSeparator;
 
   Message({
     required this.id,
@@ -12,7 +11,6 @@ class Message {
     required this.createdAt,
     required this.senderId,
     required this.receiverId,
-    required this.putSeparator,
   });
 
   factory Message.fromMap(Map<String, dynamic> map) {
@@ -22,7 +20,6 @@ class Message {
       createdAt: DateTime.parse(map['created_at']),
       senderId: map['sender_id'],
       receiverId: map['receiver_id'],
-      putSeparator: map['put_separator'],
     );
   }
 }

@@ -7,13 +7,32 @@ import '../models/models.dart';
 import '../providers/supabase_provider.dart';
 import '../widgets/widgets.dart';
 
-class ChatPage extends StatelessWidget {
+class ChatPage extends StatefulWidget {
   const ChatPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final data = Provider.of<SupabaseProvider>(context).getUsers();
+  State<ChatPage> createState() => _ChatPageState();
+}
 
+class _ChatPageState extends State<ChatPage> {
+  late final Future<List<User>> data;
+
+  @override
+  void initState() {
+    super.initState();
+    getUsers();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  void getUsers() =>
+      data = Provider.of<SupabaseProvider>(context, listen: false).getUsers();
+
+  @override
+  Widget build(BuildContext context) {
     return FutureBuilder(
       future: data,
       builder: (context, snapshot) {
