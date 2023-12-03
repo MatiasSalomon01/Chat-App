@@ -2,7 +2,7 @@ class User {
   final int id;
   final String name;
   final String? profilePictureUrl;
-  final String? lastMessage;
+  String? lastMessage;
 
   User({
     required this.id,

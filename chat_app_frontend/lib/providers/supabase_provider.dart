@@ -15,6 +15,21 @@ class SupabaseProvider extends ChangeNotifier {
       users.add(user);
     }
 
+    final data = await supabase
+        .from('ChatLastMessage')
+        .select()
+        .or('sender_id.eq.$myId,sender_id.eq.$myId')
+        .withConverter((data) => (data as List<dynamic>)
+            .map((item) => ChatLastMessage.fromMap(item))
+            .toList());
+
+    for (var user in users) {
+      user.lastMessage = data
+          .firstWhere((element) =>
+              element.senderId == user.id || element.receiverId == user.id)
+          .text;
+    }
+
     return users;
   }
 

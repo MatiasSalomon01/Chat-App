@@ -15,7 +15,7 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
-  late final Future<List<User>> data;
+  // late final Future<List<User>> data;
 
   @override
   void initState() {
@@ -28,13 +28,13 @@ class _ChatPageState extends State<ChatPage> {
     super.dispose();
   }
 
-  void getUsers() =>
-      data = Provider.of<SupabaseProvider>(context, listen: false).getUsers();
+  Future<List<User>> getUsers() =>
+      Provider.of<SupabaseProvider>(context, listen: false).getUsers();
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: data,
+      future: getUsers(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(
