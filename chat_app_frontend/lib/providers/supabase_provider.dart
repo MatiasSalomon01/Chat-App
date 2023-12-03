@@ -5,10 +5,17 @@ import 'package:flutter/material.dart';
 import '../constants/supabase.dart';
 
 class SupabaseProvider extends ChangeNotifier {
+  int _myId = 0;
+  int get myId => _myId;
+  set myId(int value) {
+    _myId = value;
+    notifyListeners();
+  }
+
   Future<List<User>> getUsers() async {
     print('****************** - GET USERS -');
     List<User> users = [];
-    final response = await supabase.from('Users').select().neq('id', 1);
+    final response = await supabase.from('Users').select().neq('id', myId);
 
     for (var item in response) {
       User user = User.fromMap(item);
@@ -24,10 +31,12 @@ class SupabaseProvider extends ChangeNotifier {
             .toList());
 
     for (var user in users) {
-      user.lastMessage = data
-          .firstWhere((element) =>
-              element.senderId == user.id || element.receiverId == user.id)
-          .text;
+      if (data.isNotEmpty) {
+        user.lastMessage = data
+            .firstWhere((element) =>
+                element.senderId == user.id || element.receiverId == user.id)
+            .text;
+      }
     }
 
     return users;
@@ -88,5 +97,10 @@ class SupabaseProvider extends ChangeNotifier {
   Future<void> insertLastMessage(ChatLastMessage lastMessage) async {
     print('****************** - INSERT LAST MESSAGE -');
     await supabase.from("ChatLastMessage").upsert(lastMessage.toMap());
+  }
+
+  Future<List<User>> usersToSelect() async {
+    return await supabase.from('Users').select().withConverter(
+        (data) => (data as List<dynamic>).map((e) => User.fromMap(e)).toList());
   }
 }

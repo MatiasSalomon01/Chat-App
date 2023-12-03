@@ -1,3 +1,4 @@
+import 'package:chat_app_frontend/pages/pages.dart';
 import 'package:flutter/material.dart';
 
 import '../constants/colors.dart';
@@ -20,6 +21,16 @@ class MoreButton extends StatelessWidget {
         shadowColor: Colors.black,
         offset: const Offset(10, kToolbarHeight - 10),
         tooltip: '',
+        onSelected: (value) {
+          if (value == 6) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const SelectUserPage(),
+              ),
+            );
+          }
+        },
         itemBuilder: (context) {
           return const [
             PopupMenuItem(
@@ -49,6 +60,13 @@ class MoreButton extends StatelessWidget {
             PopupMenuItem(
               child: Text(
                 'Ajustes',
+                style: TextStyle(color: white, fontSize: 18),
+              ),
+            ),
+            PopupMenuItem(
+              value: 6,
+              child: Text(
+                'Cerrar sesión',
                 style: TextStyle(color: white, fontSize: 18),
               ),
             ),

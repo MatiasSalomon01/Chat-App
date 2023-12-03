@@ -1,4 +1,5 @@
 import 'package:chat_app_frontend/constants/supabase.dart';
+import 'package:chat_app_frontend/pages/pages.dart';
 import 'package:chat_app_frontend/providers/nav_bar_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -39,7 +40,8 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: HomeScreen(),
+      // home: HomeScreen(),
+      home: SelectUserPage(),
     );
   }
 }

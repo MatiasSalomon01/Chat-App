@@ -35,7 +35,7 @@ class _ChatMessagesState extends State<ChatMessages> {
   @override
   void dispose() {
     final lastMessage = ChatLastMessage(
-      senderId: myId,
+      senderId: provider.myId,
       receiverId: widget.receiverId,
       text: messages.last.text,
       date: DateTime.now(),
@@ -51,7 +51,8 @@ class _ChatMessagesState extends State<ChatMessages> {
   // }
 
   void getStreamMessages() {
-    streamMessages = provider.getStreamMessages(myId, widget.receiverId);
+    streamMessages =
+        provider.getStreamMessages(provider.myId, widget.receiverId);
   }
 
   @override
@@ -79,10 +80,10 @@ class _ChatMessagesState extends State<ChatMessages> {
                   messages = (snapshot.data! as List<dynamic>)
                       .map((item) => Message.fromMap(item))
                       .where((message) =>
-                          (message.senderId == myId &&
+                          (message.senderId == provider.myId &&
                               message.receiverId == widget.receiverId) ||
                           (message.senderId == widget.receiverId &&
-                              message.receiverId == myId))
+                              message.receiverId == provider.myId))
                       .toList();
 
                   messages = provider.putSeparators(messages);
@@ -96,7 +97,7 @@ class _ChatMessagesState extends State<ChatMessages> {
                     itemCount: itemCount,
                     itemBuilder: (context, index) {
                       final Message message = messages[index];
-                      bool isMe = message.senderId == myId;
+                      bool isMe = message.senderId == provider.myId;
 
                       return Container(
                         margin: isMe
