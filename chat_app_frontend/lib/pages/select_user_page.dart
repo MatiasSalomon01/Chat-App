@@ -27,6 +27,7 @@ class SelectUserPage extends StatelessWidget {
             return Container();
           }
           var data = snapshot.data!;
+          provider.users = data;
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
             child: Column(

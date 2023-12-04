@@ -1,4 +1,5 @@
 import 'package:chat_app_frontend/helpers/sized_box_helper.dart';
+import 'package:chat_app_frontend/models/chat_last_message.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -16,11 +17,15 @@ class ChatPage extends StatefulWidget {
 
 class _ChatPageState extends State<ChatPage> {
   // late final Future<List<User>> data;
+  late Stream<dynamic> streamUsers;
+  late SupabaseProvider provider;
 
   @override
   void initState() {
     super.initState();
-    getUsers();
+    provider = Provider.of<SupabaseProvider>(context, listen: false);
+    // getUsers();
+    getStreamMessages();
   }
 
   @override
@@ -28,13 +33,16 @@ class _ChatPageState extends State<ChatPage> {
     super.dispose();
   }
 
-  Future<List<User>> getUsers() =>
-      Provider.of<SupabaseProvider>(context, listen: false).getUsers();
+  // Future<void> getUsers() async => await provider.getUsers();
+
+  void getStreamMessages() {
+    streamUsers = provider.getStreamUsers(provider.myId);
+  }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: getUsers(),
+    return StreamBuilder(
+      stream: streamUsers,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(
@@ -42,7 +50,27 @@ class _ChatPageState extends State<ChatPage> {
           );
         }
 
-        final users = snapshot.data!;
+        final chatLastMessages = (snapshot.data! as List<dynamic>)
+            .map((item) => ChatLastMessage.fromMap(item))
+            .toList();
+
+        final users = provider.users
+            .where((element) => element.id != provider.myId)
+            .toList();
+
+        for (var user in users) {
+          var fdfd = chatLastMessages.any((element) =>
+              element.senderId == provider.myId &&
+              element.receiverId == user.id);
+          if (!fdfd) continue;
+
+          user.lastMessage = chatLastMessages
+              .firstWhere((element) =>
+                  element.senderId == provider.myId &&
+                  element.receiverId == user.id)
+              .text;
+        }
+
         return NotificationListener<OverscrollIndicatorNotification>(
           onNotification: (notification) {
             notification.disallowIndicator();

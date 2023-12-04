@@ -12,35 +12,48 @@ class SupabaseProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<List<User>> getUsers() async {
-    print('****************** - GET USERS -');
-    List<User> users = [];
-    final response = await supabase.from('Users').select().neq('id', myId);
+  List<User> _users = [];
 
-    for (var item in response) {
-      User user = User.fromMap(item);
-      users.add(user);
-    }
+  List<User> get users => _users;
 
-    final data = await supabase
-        .from('ChatLastMessage')
-        .select()
-        .or('sender_id.eq.$myId,sender_id.eq.$myId')
-        .withConverter((data) => (data as List<dynamic>)
-            .map((item) => ChatLastMessage.fromMap(item))
-            .toList());
-
-    for (var user in users) {
-      if (data.isNotEmpty) {
-        user.lastMessage = data
-            .firstWhere((element) =>
-                element.senderId == user.id || element.receiverId == user.id)
-            .text;
-      }
-    }
-
-    return users;
+  set users(List<User> value) {
+    _users = value;
+    // notifyListeners();
   }
+
+  // set users(List<User> value) {
+  //   _users = value;
+  //   notifyListeners();
+  // }
+
+  // Future<void> getUsers() async {
+  //   print('****************** - GET USERS -');
+  //   // List<User> users = [];
+  //   final response = await supabase.from('Users').select().neq('id', myId);
+
+  //   for (var item in response) {
+  //     User user = User.fromMap(item);
+  //     _users.add(user);
+  //   }
+
+  //   // final data = await supabase
+  //   //     .from('ChatLastMessage')
+  //   //     .select()
+  //   //     .or('sender_id.eq.$myId,sender_id.eq.$myId')
+  //   //     .withConverter((data) => (data as List<dynamic>)
+  //   //         .map((item) => ChatLastMessage.fromMap(item))
+  //   //         .toList());
+
+  //   // for (var user in users) {
+  //   //   if (data.isNotEmpty) {
+  //   //     user.lastMessage = data
+  //   //         .firstWhere((element) =>
+  //   //             element.senderId == user.id || element.receiverId == user.id)
+  //   //         .text;
+  //   //   }
+  //   // }
+  //   notifyListeners();
+  // }
 
   Future<List<Message>> getMessages(int senderId, int receiverId) async {
     print('****************** - GET MESSAGES -');
@@ -97,10 +110,25 @@ class SupabaseProvider extends ChangeNotifier {
   Future<void> insertLastMessage(ChatLastMessage lastMessage) async {
     print('****************** - INSERT LAST MESSAGE -');
     await supabase.from("ChatLastMessage").upsert(lastMessage.toMap());
+
+    final otherLastMessage = ChatLastMessage(
+        senderId: lastMessage.receiverId,
+        receiverId: lastMessage.senderId,
+        text: lastMessage.text,
+        date: lastMessage.date);
+    await supabase.from("ChatLastMessage").upsert(otherLastMessage.toMap());
   }
 
   Future<List<User>> usersToSelect() async {
     return await supabase.from('Users').select().withConverter(
         (data) => (data as List<dynamic>).map((e) => User.fromMap(e)).toList());
+  }
+
+  Stream getStreamUsers(int senderId) {
+    return supabase
+        .from('ChatLastMessage')
+        .stream(primaryKey: ['sender_id', 'receiver_id'])
+        .eq('sender_id', myId)
+        .order('date');
   }
 }

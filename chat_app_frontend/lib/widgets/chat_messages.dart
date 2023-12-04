@@ -34,14 +34,14 @@ class _ChatMessagesState extends State<ChatMessages> {
 
   @override
   void dispose() {
-    final lastMessage = ChatLastMessage(
-      senderId: provider.myId,
-      receiverId: widget.receiverId,
-      text: messages.last.text,
-      date: DateTime.now(),
-    );
+    // final lastMessage = ChatLastMessage(
+    //   senderId: provider.myId,
+    //   receiverId: widget.receiverId,
+    //   text: messages.last.text,
+    //   date: DateTime.now(),
+    // );
 
-    provider.insertLastMessage(lastMessage);
+    // provider.insertLastMessage(lastMessage);
     super.dispose();
   }
 

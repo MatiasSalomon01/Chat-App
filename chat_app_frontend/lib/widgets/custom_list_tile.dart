@@ -66,7 +66,8 @@ class _CustomListTileState extends State<CustomListTile> {
                           ),
                         ),
                         Text(
-                          formatedDate(DateTime.now()),
+                          formatedDate(
+                              widget.user.lastMessageDate ?? DateTime.now()),
                           style: const TextStyle(color: grey, fontSize: 13),
                         ),
                       ],
@@ -77,7 +78,7 @@ class _CustomListTileState extends State<CustomListTile> {
                       children: [
                         Expanded(
                           child: Text(
-                            widget.user.lastMessage!,
+                            widget.user.lastMessage,
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(color: grey, fontSize: 14),
                           ),

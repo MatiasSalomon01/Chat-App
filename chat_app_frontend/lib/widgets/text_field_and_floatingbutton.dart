@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../constants/colors.dart';
 import '../constants/supabase.dart';
 import '../helpers/sized_box_helper.dart';
+import '../models/models.dart';
 import '../providers/supabase_provider.dart';
 
 class TextFieldAndFloatingButton extends StatefulWidget {
@@ -75,10 +76,20 @@ class _TextFieldAndFloatingButtonState
                   borderSide: BorderSide.none,
                 ),
               ),
-              onFieldSubmitted: (value) {
+              onFieldSubmitted: (value) async {
                 final provider =
                     Provider.of<SupabaseProvider>(context, listen: false);
-                provider.sendMessage(value, provider.myId, widget.receiverId);
+                await provider.sendMessage(
+                    value, provider.myId, widget.receiverId);
+
+                final lastMessage = ChatLastMessage(
+                  senderId: provider.myId,
+                  receiverId: widget.receiverId,
+                  text: value,
+                  date: DateTime.now(),
+                );
+
+                await provider.insertLastMessage(lastMessage);
 
                 _controller.clear();
               },
