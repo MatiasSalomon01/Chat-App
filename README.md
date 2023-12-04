@@ -1,1 +1,1 @@
-# Chat-App with Flutter and .NET
+# Chat-App with Flutter and Supabase
