@@ -25,23 +25,32 @@ class CustomAppBarChat extends StatelessWidget implements PreferredSizeWidget {
                 flex: 2,
                 child: Row(
                   children: [
-                    InkWell(
-                      onTap: () => Navigator.pop(context),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 10),
-                        child: Row(
-                          children: [
-                            const Icon(Icons.arrow_back_outlined, color: white),
-                            horizontalSpace(2),
-                            ProfilePicture(
-                              url: user.profilePictureUrl,
-                              radius: 17,
-                            ),
-                          ],
+                    Container(
+                      height: 40,
+                      width: 80,
+                      padding: EdgeInsets.symmetric(horizontal: 5),
+                      child: Material(
+                        color: transparent,
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(50),
+                          onTap: () => Navigator.pop(context),
+                          splashFactory: NoSplash.splashFactory,
+                          overlayColor: MaterialStateProperty.all(hoverColor),
+                          child: Row(
+                            children: [
+                              const Icon(Icons.arrow_back_outlined,
+                                  color: white),
+                              horizontalSpace(2),
+                              ProfilePicture(
+                                url: user.profilePictureUrl,
+                                radius: 18,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                    horizontalSpace(10),
+                    // horizontalSpace(10),
                     Text(
                       user.name,
                       style: const TextStyle(color: white, fontSize: 17),
