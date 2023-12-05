@@ -49,6 +49,7 @@ class _ChatPageState extends State<ChatPage> {
             child: CircularProgressIndicator(color: grey),
           );
         }
+        if (!snapshot.hasData) return Container();
 
         final chatLastMessages = (snapshot.data! as List<dynamic>)
             .map((item) => ChatLastMessage.fromMap(item))
