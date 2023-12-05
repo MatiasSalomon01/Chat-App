@@ -22,21 +22,22 @@ class TextFieldAndFloatingButton extends StatefulWidget {
 }
 
 class _TextFieldAndFloatingButtonState extends State<TextFieldAndFloatingButton>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   late final TextEditingController _controller;
-  late AnimationController _animationController;
-  late Animation<double> _animation;
+  late AnimationController _scaleController;
+  late Animation<double> _scaleAnimation;
   bool hasText = false;
 
   @override
   void initState() {
     super.initState();
-    _animationController = AnimationController(
+    _scaleController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 100),
+      duration: const Duration(milliseconds: 150),
+      reverseDuration: const Duration(milliseconds: 150),
     );
 
-    _animation = Tween(begin: .8, end: 1.0).animate(_animationController);
+    _scaleAnimation = Tween(begin: .7, end: 1.0).animate(_scaleController);
     _controller = TextEditingController(text: '');
 
     _controller.addListener(listener);
@@ -44,7 +45,7 @@ class _TextFieldAndFloatingButtonState extends State<TextFieldAndFloatingButton>
 
   @override
   void dispose() {
-    _animationController.dispose();
+    _scaleController.dispose();
     _controller.dispose();
     super.dispose();
   }
@@ -68,15 +69,27 @@ class _TextFieldAndFloatingButtonState extends State<TextFieldAndFloatingButton>
                 prefixIcon: const Icon(Icons.emoji_emotions_rounded),
                 prefixIconColor: grey,
                 suffixIconColor: grey,
-                suffixIcon: Padding(
-                  padding: const EdgeInsets.only(right: 10),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.end,
+                suffixIcon: Container(
+                  constraints: const BoxConstraints(maxWidth: 80),
+                  child: Stack(
+                    alignment: Alignment.center,
                     children: [
-                      const Icon(Icons.share),
-                      horizontalSpace(10),
-                      const Icon(Icons.camera_alt),
+                      AnimatedPositioned(
+                        duration: const Duration(milliseconds: 150),
+                        right: hasText ? -40 : 0,
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 15),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              const Icon(Icons.share),
+                              horizontalSpace(15),
+                              const Icon(Icons.camera_alt),
+                            ],
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -97,11 +110,11 @@ class _TextFieldAndFloatingButtonState extends State<TextFieldAndFloatingButton>
             backgroundColor: greenAccent3,
             elevation: 0,
             child: AnimatedBuilder(
-              animation: _animationController,
+              animation: _scaleController,
               builder: (context, child) {
                 return Transform.scale(
                   scale:
-                      _animationController.isDismissed ? 1 : _animation.value,
+                      _scaleController.isDismissed ? 1 : _scaleAnimation.value,
                   child: Icon(
                     hasText ? Icons.send : Icons.keyboard_voice_rounded,
                   ),
@@ -123,8 +136,9 @@ class _TextFieldAndFloatingButtonState extends State<TextFieldAndFloatingButton>
     if (_controller.text.isNotEmpty && !hasText ||
         _controller.text.isEmpty && hasText) {
       setState(() => hasText = !hasText);
-      await _animationController.forward();
-      _animationController.reset();
+
+      await _scaleController.forward();
+      _scaleController.reset();
     }
   }
 
