@@ -8,6 +8,7 @@ import '../constants/supabase.dart';
 import '../helpers/sized_box_helper.dart';
 import '../models/models.dart';
 import '../providers/supabase_provider.dart';
+import 'message_bubble.dart';
 
 class ChatMessages extends StatefulWidget {
   const ChatMessages({super.key, required this.receiverId});
@@ -19,7 +20,6 @@ class ChatMessages extends StatefulWidget {
 }
 
 class _ChatMessagesState extends State<ChatMessages> {
-  // late final Future<List<Message>> futureMessages;
   late Stream<dynamic> streamMessages;
   List<Message> messages = [];
   late SupabaseProvider provider;
@@ -28,27 +28,13 @@ class _ChatMessagesState extends State<ChatMessages> {
   void initState() {
     super.initState();
     provider = Provider.of<SupabaseProvider>(context, listen: false);
-    // getMessages();
     getStreamMessages();
   }
 
   @override
   void dispose() {
-    // final lastMessage = ChatLastMessage(
-    //   senderId: provider.myId,
-    //   receiverId: widget.receiverId,
-    //   text: messages.last.text,
-    //   date: DateTime.now(),
-    // );
-
-    // provider.insertLastMessage(lastMessage);
     super.dispose();
   }
-
-  // void getMessages() {
-  //   futureMessages = Provider.of<SupabaseProvider>(context, listen: false)
-  //       .getMessages(myId, widget.receiverId);
-  // }
 
   void getStreamMessages() {
     streamMessages =
@@ -97,56 +83,9 @@ class _ChatMessagesState extends State<ChatMessages> {
                     itemCount: itemCount,
                     itemBuilder: (context, index) {
                       final Message message = messages[index];
-                      bool isMe = message.senderId == provider.myId;
-
-                      return Container(
-                        margin: isMe
-                            ? const EdgeInsets.only(left: 50)
-                            : const EdgeInsets.only(right: 50),
-                        child: Column(
-                          children: [
-                            if (message.putSeparator) verticalSpace(8),
-                            Align(
-                              alignment: isMe
-                                  ? Alignment.centerRight
-                                  : Alignment.centerLeft,
-                              child: Container(
-                                margin: const EdgeInsets.symmetric(
-                                  horizontal: 8,
-                                  vertical: 2,
-                                ),
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 10,
-                                  vertical: 5,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: isMe ? userGreen : primary,
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Text(
-                                      message.text,
-                                      style: const TextStyle(color: white),
-                                    ),
-                                    horizontalSpace(10),
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 10),
-                                      child: Text(
-                                        message.createdAt.getHour(),
-                                        style: TextStyle(
-                                          color: white.withOpacity(.6),
-                                          fontSize: 12,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                      return MessageBubble(
+                        message: message,
+                        isMe: message.senderId == provider.myId,
                       );
                     },
                   );
