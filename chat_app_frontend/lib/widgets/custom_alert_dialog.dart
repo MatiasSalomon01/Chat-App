@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 
 import '../constants/colors.dart';
 import '../models/models.dart';
+import '../models/user.dart';
 
 class CustomAlertDialog extends StatelessWidget {
   const CustomAlertDialog({
     super.key,
-    required this.chat,
+    required this.user,
   });
 
-  final Chat chat;
+  final User user;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +32,7 @@ class CustomAlertDialog extends StatelessWidget {
                   child: CircleAvatar(
                     radius: double.infinity,
                     backgroundImage: NetworkImage(
-                      chat.profilePictureUrl ?? "https://picsum.photos/200",
+                      user.profilePictureUrl!,
                     ),
                   ),
                 ),
@@ -73,7 +74,7 @@ class CustomAlertDialog extends StatelessWidget {
               alignment: Alignment.centerLeft,
               padding: const EdgeInsets.only(left: 10),
               child: Text(
-                chat.name,
+                user.name,
                 style: const TextStyle(color: white, fontSize: 20),
               ),
             )

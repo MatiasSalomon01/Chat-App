@@ -1,22 +1,23 @@
-import 'package:chat_app_frontend/screens/chat_screen.dart';
 import 'package:chat_app_frontend/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
 import '../constants/colors.dart';
 import '../helpers/sized_box_helper.dart';
 import '../models/models.dart';
+import '../models/user.dart';
+import '../screens/screens.dart';
 
 class CustomListTile extends StatefulWidget {
   const CustomListTile({
     super.key,
     required this.pageIndex,
-    required this.chat,
+    required this.user,
     required this.lastIndex,
   });
 
   final int pageIndex;
   final int lastIndex;
-  final Chat chat;
+  final User user;
 
   @override
   State<CustomListTile> createState() => _CustomListTileState();
@@ -35,7 +36,7 @@ class _CustomListTileState extends State<CustomListTile> {
         onTap: () => Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ChatScreen(chat: widget.chat),
+            builder: (context) => ChatScreen(user: widget.user),
           ),
         ),
         child: Container(
@@ -45,7 +46,7 @@ class _CustomListTileState extends State<CustomListTile> {
             children: [
               GestureDetector(
                 onTap: () => showProfilePictureModal(context),
-                child: ProfilePicture(url: widget.chat.profilePictureUrl),
+                child: ProfilePicture(url: widget.user.profilePictureUrl),
               ),
               horizontalSpace(12),
               Expanded(
@@ -57,7 +58,7 @@ class _CustomListTileState extends State<CustomListTile> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          widget.chat.name,
+                          widget.user.name,
                           style: const TextStyle(
                             color: white,
                             fontSize: 17,
@@ -65,7 +66,8 @@ class _CustomListTileState extends State<CustomListTile> {
                           ),
                         ),
                         Text(
-                          formatedDate(widget.chat.date),
+                          formatedDate(
+                              widget.user.lastMessageDate ?? DateTime.now()),
                           style: const TextStyle(color: grey, fontSize: 13),
                         ),
                       ],
@@ -76,12 +78,12 @@ class _CustomListTileState extends State<CustomListTile> {
                       children: [
                         Expanded(
                           child: Text(
-                            widget.chat.lastMessage,
+                            widget.user.lastMessage,
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(color: grey, fontSize: 14),
                           ),
                         ),
-                        if (widget.chat.isFixed)
+                        if (false)
                           Transform.rotate(
                             angle: .5,
                             child: const Icon(
@@ -105,7 +107,7 @@ class _CustomListTileState extends State<CustomListTile> {
   Future<dynamic> showProfilePictureModal(BuildContext context) async {
     return await showDialog(
       context: context,
-      builder: (context) => CustomAlertDialog(chat: widget.chat),
+      builder: (context) => CustomAlertDialog(user: widget.user),
     );
   }
 

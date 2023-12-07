@@ -1,12 +1,16 @@
-import 'package:chat_app_frontend/models/content.dart';
+import 'package:chat_app_frontend/constants/supabase.dart';
+import 'package:chat_app_frontend/pages/pages.dart';
 import 'package:chat_app_frontend/providers/nav_bar_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:signalr_core/signalr_core.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
+import 'providers/supabase_provider.dart';
 import 'screens/screens.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Supabase.initialize(url: url, anonKey: anonKey);
   runApp(const AppState());
 }
 
@@ -19,6 +23,9 @@ class AppState extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (context) => NavBarProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => SupabaseProvider(),
         )
       ],
       child: const MainApp(),
@@ -33,7 +40,8 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: HomeScreen(),
+      // home: HomeScreen(),
+      home: SelectUserPage(),
     );
   }
 }

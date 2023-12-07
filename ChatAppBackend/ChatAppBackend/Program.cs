@@ -1,4 +1,8 @@
+using ChatAppBackend.Data;
 using ChatAppBackend.Hubs;
+using ChatAppBackend.Interfaces;
+using ChatAppBackend.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +11,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSignalR();
 builder.Services.AddCors();
+builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("default")));
+
+builder.Services.AddTransient<IMessageRepository, MessageRepository>();
 
 var app = builder.Build();
 

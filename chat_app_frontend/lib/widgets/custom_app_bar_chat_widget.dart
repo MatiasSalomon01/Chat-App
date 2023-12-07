@@ -1,4 +1,5 @@
 import 'package:chat_app_frontend/helpers/sized_box_helper.dart';
+import 'package:chat_app_frontend/models/user.dart';
 import 'package:flutter/material.dart';
 
 import '../constants/colors.dart';
@@ -6,9 +7,9 @@ import '../models/models.dart';
 import 'widgets.dart';
 
 class CustomAppBarChat extends StatelessWidget implements PreferredSizeWidget {
-  const CustomAppBarChat({super.key, required this.chat});
-  final Chat chat;
-
+  const CustomAppBarChat({super.key, required this.user});
+  final User user;
+  final double appBarHeight = kToolbarHeight;
   @override
   Widget build(BuildContext context) {
     return PreferredSize(
@@ -16,7 +17,7 @@ class CustomAppBarChat extends StatelessWidget implements PreferredSizeWidget {
       child: SafeArea(
         child: Container(
           color: primary,
-          height: kTextTabBarHeight,
+          height: appBarHeight,
           width: MediaQuery.of(context).size.width,
           child: Row(
             children: [
@@ -24,25 +25,34 @@ class CustomAppBarChat extends StatelessWidget implements PreferredSizeWidget {
                 flex: 2,
                 child: Row(
                   children: [
-                    InkWell(
-                      onTap: () => Navigator.pop(context),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 10),
-                        child: Row(
-                          children: [
-                            const Icon(Icons.arrow_back_outlined, color: white),
-                            horizontalSpace(2),
-                            ProfilePicture(
-                              url: chat.profilePictureUrl,
-                              radius: 17,
-                            ),
-                          ],
+                    Container(
+                      height: 40,
+                      width: 80,
+                      padding: EdgeInsets.symmetric(horizontal: 5),
+                      child: Material(
+                        color: transparent,
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(50),
+                          onTap: () => Navigator.pop(context),
+                          splashFactory: NoSplash.splashFactory,
+                          overlayColor: MaterialStateProperty.all(hoverColor),
+                          child: Row(
+                            children: [
+                              const Icon(Icons.arrow_back_outlined,
+                                  color: white),
+                              horizontalSpace(2),
+                              ProfilePicture(
+                                url: user.profilePictureUrl,
+                                radius: 18,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                    horizontalSpace(10),
+                    // horizontalSpace(10),
                     Text(
-                      chat.name,
+                      user.name,
                       style: const TextStyle(color: white, fontSize: 17),
                     ),
                   ],
@@ -66,5 +76,5 @@ class CustomAppBarChat extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => Size.fromHeight(appBarHeight);
 }

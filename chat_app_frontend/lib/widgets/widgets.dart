@@ -1,3 +1,5 @@
+export 'package:chat_app_frontend/widgets/text_field_and_floatingbutton.dart';
+export 'package:chat_app_frontend/widgets/chat_messages.dart';
 export 'package:chat_app_frontend/widgets/custom_app_bar_chat_widget.dart';
 export 'package:chat_app_frontend/widgets/custom_list_tile_call.dart';
 export 'package:chat_app_frontend/widgets/custom_alert_dialog.dart';
