@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../constants/colors.dart';
-import '../helpers/sized_box_helper.dart';
 
 class NavBarItem extends StatefulWidget {
   const NavBarItem({
@@ -11,6 +10,7 @@ class NavBarItem extends StatefulWidget {
     required this.pageIndex,
     required this.title,
   });
+
   final int pageIndex;
   final String title;
 
@@ -47,7 +47,7 @@ class _NavBarItemState extends State<NavBarItem> {
                     fontSize: 18,
                   ),
                 ),
-                verticalSpace(12),
+                // verticalSpace(12),
                 if (isSelected)
                   Container(
                     height: 3,
