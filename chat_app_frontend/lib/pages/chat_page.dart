@@ -65,11 +65,12 @@ class _ChatPageState extends State<ChatPage> {
               element.receiverId == user.id);
           if (!fdfd) continue;
 
-          user.lastMessage = chatLastMessages
-              .firstWhere((element) =>
-                  element.senderId == provider.myId &&
-                  element.receiverId == user.id)
-              .text;
+          var x = chatLastMessages.firstWhere((element) =>
+              element.senderId == provider.myId &&
+              element.receiverId == user.id);
+
+          user.lastMessage = x.text;
+          user.lastMessageDate = x.date;
         }
 
         return NotificationListener<OverscrollIndicatorNotification>(

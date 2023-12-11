@@ -137,7 +137,8 @@ class SupabaseProvider extends ChangeNotifier {
   Future<void> createUser(String username) async {
     var user = User(
       name: username,
-      profilePictureUrl: 'https://picsum.photos/20${Random().nextInt(10)}',
+      profilePictureUrl:
+          'https://picsum.photos/2${Random().nextInt(10)}${Random().nextInt(10)}',
     );
 
     var response = await supabase
