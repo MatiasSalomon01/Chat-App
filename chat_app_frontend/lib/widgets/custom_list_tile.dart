@@ -78,7 +78,7 @@ class _CustomListTileState extends State<CustomListTile> {
                       children: [
                         Expanded(
                           child: Text(
-                            widget.user.lastMessage,
+                            widget.user.lastMessage ?? '',
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(color: grey, fontSize: 14),
                           ),

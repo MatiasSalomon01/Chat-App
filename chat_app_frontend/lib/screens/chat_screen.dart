@@ -17,8 +17,8 @@ class ChatScreen extends StatelessWidget {
         children: [
           Column(
             children: [
-              ChatMessages(receiverId: user.id),
-              TextFieldAndFloatingButton(receiverId: user.id)
+              ChatMessages(receiverId: user.id!),
+              TextFieldAndFloatingButton(receiverId: user.id!)
             ],
           ),
         ],

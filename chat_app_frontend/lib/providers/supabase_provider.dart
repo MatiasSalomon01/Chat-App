@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:chat_app_frontend/models/chat_last_message.dart';
 import 'package:chat_app_frontend/models/models.dart';
 import 'package:flutter/material.dart';
@@ -130,5 +132,29 @@ class SupabaseProvider extends ChangeNotifier {
         .stream(primaryKey: ['sender_id', 'receiver_id'])
         .eq('sender_id', myId)
         .order('date');
+  }
+
+  Future<void> createUser(String username) async {
+    var user = User(
+      name: username,
+      profilePictureUrl: 'https://picsum.photos/20${Random().nextInt(10)}',
+    );
+
+    var response = await supabase
+        .from('Users')
+        .insert(user.toMap())
+        .select()
+        .withConverter((data) =>
+            (data as List<dynamic>).map((e) => User.fromMap(e)).toList());
+
+    users.addAll(response);
+    notifyListeners();
+  }
+
+  Future<void> deleteUser(int id) async {
+    await supabase.from('Users').delete().eq('id', id);
+
+    users.removeWhere((element) => element.id == id);
+    notifyListeners();
   }
 }
