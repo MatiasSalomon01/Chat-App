@@ -66,8 +66,7 @@ class _CustomListTileState extends State<CustomListTile> {
                           ),
                         ),
                         Text(
-                          formatedDate(
-                              widget.user.lastMessageDate ?? DateTime.now()),
+                          formatedDate(widget.user.lastMessageDate),
                           style: const TextStyle(color: grey, fontSize: 13),
                         ),
                       ],
@@ -78,7 +77,7 @@ class _CustomListTileState extends State<CustomListTile> {
                       children: [
                         Expanded(
                           child: Text(
-                            widget.user.lastMessage,
+                            widget.user.lastMessage ?? '',
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(color: grey, fontSize: 14),
                           ),
@@ -127,6 +126,8 @@ class _CustomListTileState extends State<CustomListTile> {
             )
           : const EdgeInsets.all(12);
 
-  String formatedDate(DateTime date) =>
-      '${date.day}/${date.month}/${date.year}';
+  String formatedDate(DateTime? date) {
+    if (date == null) return '';
+    return '${date.day}/${date.month}/${date.year}';
+  }
 }

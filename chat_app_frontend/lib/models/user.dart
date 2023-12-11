@@ -1,15 +1,15 @@
 class User {
-  final int id;
+  final int? id;
   final String name;
   final String? profilePictureUrl;
-  String lastMessage;
+  String? lastMessage;
   DateTime? lastMessageDate;
 
   User({
-    required this.id,
+    this.id,
     required this.name,
     this.profilePictureUrl,
-    this.lastMessage = '',
+    this.lastMessage,
     this.lastMessageDate,
   });
 
@@ -19,5 +19,12 @@ class User {
       name: map['name'],
       profilePictureUrl: map['profile_picture'],
     );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'name': name,
+      'profile_picture': profilePictureUrl,
+    };
   }
 }
