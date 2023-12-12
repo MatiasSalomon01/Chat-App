@@ -50,60 +50,7 @@ class _SelectUserPageState extends State<SelectUserPage> {
               shape: MaterialStatePropertyAll(CircleBorder()),
               elevation: MaterialStatePropertyAll(0),
             ),
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (context) {
-                  return AlertDialog(
-                    backgroundColor: primary,
-                    content: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Text(
-                          'Ingrese su nombre:',
-                          style: TextStyle(color: white),
-                        ),
-                        verticalSpace(10),
-                        TextFormField(
-                          controller: _controller,
-                          cursorColor: green,
-                          keyboardType: TextInputType.multiline,
-                          style: const TextStyle(
-                              color: grey, fontSize: 18, height: 1.3),
-                          onFieldSubmitted: (_) => createUser(provider),
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(50),
-                              borderSide: BorderSide.none,
-                            ),
-                            fillColor: white.withOpacity(.1),
-                            filled: true,
-                            contentPadding: EdgeInsets.zero,
-                            prefixIcon: const Icon(
-                              Icons.person,
-                              color: Colors.grey,
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                    actions: [
-                      TextButton(
-                        onPressed: () => createUser(provider),
-                        child: Text('Crear', style: TextStyle(color: white)),
-                        style: ButtonStyle(
-                          overlayColor:
-                              MaterialStatePropertyAll(white.withOpacity(.2)),
-                          backgroundColor:
-                              MaterialStatePropertyAll(white.withOpacity(.1)),
-                        ),
-                      )
-                    ],
-                  );
-                },
-              );
-            },
+            onPressed: () => showModal(context, provider),
             child: const Icon(Icons.add),
           ),
           // horizontalSpace(10),
@@ -122,22 +69,79 @@ class _SelectUserPageState extends State<SelectUserPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                GridView.builder(
-                  shrinkWrap: true,
-                  itemCount: data.length,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
+                Expanded(
+                  child: GridView.builder(
+                    itemCount: data.length,
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 10,
+                    ),
+                    itemBuilder: (context, index) => _Item(
+                      provider: provider,
+                      user: data[index],
+                    ),
                   ),
-                  itemBuilder: (context, index) =>
-                      _Item(provider: provider, user: data[index]),
                 ),
               ],
             ),
           );
         },
       ),
+    );
+  }
+
+  Future<dynamic> showModal(BuildContext context, SupabaseProvider provider) {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: primary,
+          content: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                'Ingrese su nombre:',
+                style: TextStyle(color: white),
+              ),
+              verticalSpace(10),
+              TextFormField(
+                controller: _controller,
+                cursorColor: green,
+                keyboardType: TextInputType.multiline,
+                style: const TextStyle(color: grey, fontSize: 18, height: 1.3),
+                onFieldSubmitted: (_) => createUser(provider),
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(50),
+                    borderSide: BorderSide.none,
+                  ),
+                  fillColor: white.withOpacity(.1),
+                  filled: true,
+                  contentPadding: EdgeInsets.zero,
+                  prefixIcon: const Icon(
+                    Icons.person,
+                    color: Colors.grey,
+                  ),
+                ),
+              )
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => createUser(provider),
+              child: Text('Crear', style: TextStyle(color: white)),
+              style: ButtonStyle(
+                overlayColor: MaterialStatePropertyAll(white.withOpacity(.2)),
+                backgroundColor:
+                    MaterialStatePropertyAll(white.withOpacity(.1)),
+              ),
+            )
+          ],
+        );
+      },
     );
   }
 }
