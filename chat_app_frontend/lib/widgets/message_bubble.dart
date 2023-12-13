@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:chat_app_frontend/extensions/datime_extensions.dart';
 import 'package:flutter/material.dart';
 
@@ -14,9 +16,9 @@ class MessageBubble extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: isMe
-          ? const EdgeInsets.only(left: 50)
-          : const EdgeInsets.only(right: 50),
+      // margin: isMe
+      //     ? const EdgeInsets.only(left: 50)
+      //     : const EdgeInsets.only(right: 50),
       child: Stack(
         children: [
           Column(
@@ -27,22 +29,37 @@ class MessageBubble extends StatelessWidget {
                 child: Container(
                   margin:
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  // padding:
+                  //     const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                   decoration: BoxDecoration(
                     color: isMe ? userGreen : primary,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Text(
-                        message.text,
-                        style: const TextStyle(color: white),
+                      Container(
+                        constraints: BoxConstraints(
+                          maxWidth: Platform.isAndroid
+                              ? MediaQuery.of(context).size.width * .75
+                              : MediaQuery.of(context).size.width * .8,
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 5,
+                          ),
+                          child: Text(
+                            message.text,
+                            maxLines: 10,
+                            style:
+                                const TextStyle(color: white, fontSize: 14.5),
+                          ),
+                        ),
                       ),
-                      horizontalSpace(10),
                       Padding(
-                        padding: const EdgeInsets.only(top: 10),
+                        padding: const EdgeInsets.only(bottom: 5),
                         child: Text(
                           message.createdAt.getHour(),
                           style: TextStyle(
@@ -51,6 +68,7 @@ class MessageBubble extends StatelessWidget {
                           ),
                         ),
                       ),
+                      horizontalSpace(10),
                     ],
                   ),
                 ),
@@ -58,16 +76,12 @@ class MessageBubble extends StatelessWidget {
             ],
           ),
           if (message.putSeparator)
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 9.5,
-              child: Align(
-                alignment: isMe ? Alignment.bottomRight : Alignment.centerLeft,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 10),
-                  child: CustomPaint(
-                    painter: FirstMessagePin(isMe: isMe),
-                  ),
-                ),
+            Container(
+              alignment: isMe ? Alignment.bottomRight : Alignment.centerLeft,
+              padding: isMe ? const EdgeInsets.only(right: 12) : null,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: CustomPaint(painter: FirstMessagePin(isMe: isMe)),
               ),
             ),
         ],

@@ -148,7 +148,7 @@ class SupabaseProvider extends ChangeNotifier {
         .withConverter((data) =>
             (data as List<dynamic>).map((e) => User.fromMap(e)).toList());
 
-    users.addAll(response);
+    users.add(response.first);
     notifyListeners();
   }
 
