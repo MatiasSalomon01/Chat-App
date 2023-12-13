@@ -158,4 +158,8 @@ class SupabaseProvider extends ChangeNotifier {
     users.removeWhere((element) => element.id == id);
     notifyListeners();
   }
+
+  Future<void> deleteMessages(List<int> messageIds) async {
+    await supabase.from('Messages').delete().in_('id', messageIds);
+  }
 }

@@ -5,6 +5,7 @@ class Message {
   final int senderId;
   final int receiverId;
   bool putSeparator;
+  bool isSelected;
 
   Message({
     required this.id,
@@ -13,6 +14,7 @@ class Message {
     required this.senderId,
     required this.receiverId,
     this.putSeparator = false,
+    this.isSelected = false,
   });
 
   factory Message.fromMap(Map<String, dynamic> map) {
