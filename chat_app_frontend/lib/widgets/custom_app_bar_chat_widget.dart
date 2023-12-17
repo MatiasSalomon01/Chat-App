@@ -4,6 +4,7 @@ import 'package:chat_app_frontend/models/user.dart';
 import 'package:chat_app_frontend/providers/chat_screen_provider.dart';
 import 'package:chat_app_frontend/providers/supabase_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../constants/colors.dart';
@@ -68,7 +69,9 @@ class _Content2 extends StatelessWidget {
             children: [
               CustomMaterialButton(
                 icon: Icons.arrow_back_outlined,
-                onTap: () {},
+                onTap: () {
+                  chatScreenProvider.resetStateOfSelectedTexts();
+                },
               ),
               horizontalSpace(20),
               Text(
@@ -88,11 +91,25 @@ class _Content2 extends StatelessWidget {
                     onTap: () async {
                       await Provider.of<SupabaseProvider>(context,
                               listen: false)
-                          .deleteMessages(chatScreenProvider.messagesIds);
+                          .deleteMessages(chatScreenProvider.getMessageIds());
                       chatScreenProvider.resetStateOfSelectedTexts();
                     },
                   ),
-                  const CustomMaterialButton(icon: Icons.copy),
+                  CustomMaterialButton(
+                    icon: Icons.copy,
+                    onTap: () {
+                      if (chatScreenProvider.messagesIds.isNotEmpty) {
+                        Clipboard.setData(ClipboardData(
+                            text: chatScreenProvider.copyToClipboard()));
+                        String mesaage = chatScreenProvider.messagesIds.length >
+                                1
+                            ? '${chatScreenProvider.messagesIds.length} mensajes copiados'
+                            : 'Mensaje copiado';
+                        _showAlert(context, mesaage, 1000, showPic: true);
+                        _showAlert(context, 'Se copió al portapapeles', 2000);
+                      }
+                    },
+                  ),
                   Transform(
                     transform: Matrix4.identity()..scale(-1.0, 1.0, 1.0),
                     alignment: Alignment.center,
@@ -107,7 +124,7 @@ class _Content2 extends StatelessWidget {
                     onTap: () async {
                       await Provider.of<SupabaseProvider>(context,
                               listen: false)
-                          .deleteMessages(chatScreenProvider.messagesIds);
+                          .deleteMessages(chatScreenProvider.getMessageIds());
                       chatScreenProvider.resetStateOfSelectedTexts();
                     },
                   ),
@@ -116,10 +133,47 @@ class _Content2 extends StatelessWidget {
                     alignment: Alignment.center,
                     child: const CustomMaterialButton(icon: Icons.reply),
                   ),
-                  const CustomMaterialButton(icon: Icons.more_vert),
+                  CustomMaterialButton(
+                    icon: Icons.copy,
+                    onTap: () {
+                      if (chatScreenProvider.messagesIds.isNotEmpty) {
+                        Clipboard.setData(ClipboardData(
+                            text: chatScreenProvider.copyToClipboard()));
+                        String mesaage = chatScreenProvider.messagesIds.length >
+                                1
+                            ? '${chatScreenProvider.messagesIds.length} mensajes copiados'
+                            : 'Mensaje copiado';
+                        _showAlert(context, mesaage, 1000, showPic: true);
+                        _showAlert(context, 'Se copió al portapapeles', 2000);
+                      }
+                    },
+                  ),
                 ],
         ),
       ],
+    );
+  }
+
+  ScaffoldFeatureController<SnackBar, SnackBarClosedReason> _showAlert(
+      BuildContext context, String text, int duration,
+      {bool showPic = false}) {
+    return ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: const Color(0xFF323232).withOpacity(.9),
+        duration: Duration(milliseconds: duration),
+        behavior: SnackBarBehavior.floating,
+        margin: const EdgeInsets.symmetric(horizontal: 50, vertical: 60),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        content: Row(
+          children: [
+            if (showPic) ...[
+              Image.asset('assets/whatsapp.png', height: 20),
+              horizontalSpace(10),
+            ],
+            Text(text),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -179,39 +233,6 @@ class _Content extends StatelessWidget {
             Icon(Icons.more_vert, color: white, size: 22),
           ],
         ),
-        // Consumer<ChatScreenProvider>(
-        //   builder: (_, chatScreenProvider, child) {
-        //     if (chatScreenProvider.totalSelected > 0) {
-        //       int count = chatScreenProvider.totalSelected;
-        //       return _Actions(
-        //         icons: [
-        //           Text(
-        //             '$count  ${count > 1 ? 'Mensajes' : 'Mensaje'}',
-        //             style: const TextStyle(color: white),
-        //           ),
-        //           GestureDetector(
-        //             onTap: () async {
-        //               await supabaseProvider
-        //                   .deleteMessages(chatScreenProvider.messagesIds);
-        //               chatScreenProvider.resetStateOfSelectedTexts();
-        //             },
-        //             child:
-        //                 const Icon(Icons.delete, color: white, size: 20),
-        //           ),
-        //         ],
-        //       );
-        //     }
-
-        //     return child!;
-        //   },
-        // child: const _Actions(
-        //   icons: [
-        //     Icon(Icons.videocam_rounded, color: white, size: 25),
-        //     Icon(Icons.call, color: white, size: 20),
-        //     Icon(Icons.more_vert, color: white, size: 22),
-        //   ],
-        // ),
-        // ),
       ],
     );
   }

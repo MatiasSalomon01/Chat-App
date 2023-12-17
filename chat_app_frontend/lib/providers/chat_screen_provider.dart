@@ -1,3 +1,4 @@
+import 'package:chat_app_frontend/extensions/datime_extensions.dart';
 import 'package:flutter/material.dart';
 
 import '../models/models.dart';
@@ -7,11 +8,11 @@ class ChatScreenProvider extends ChangeNotifier {
 
   int get totalSelected => _totalSelected;
 
-  final List<int> _messagesIds = [];
+  final List<Message> _messagesIds = [];
 
-  List<int> get messagesIds => _messagesIds;
+  List<Message> get messagesIds => _messagesIds;
 
-  void registerSelectedText(bool value, int id) {
+  void registerSelectedText(bool value, Message id) {
     if (value) {
       _totalSelected++;
       _messagesIds.add(id);
@@ -31,11 +32,15 @@ class ChatScreenProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  late List<Message> _messages = [];
+  List<int> getMessageIds() {
+    return _messagesIds.map((e) => e.id).toList();
+  }
 
-  List<Message> get messages => _messages;
-
-  set messages(List<Message> value) {
-    _messages = value;
+  String copyToClipboard() {
+    String text = '';
+    for (var message in _messagesIds) {
+      text += '[${message.createdAt.getDateForClipboard()}]: ${message.text}\n';
+    }
+    return text;
   }
 }

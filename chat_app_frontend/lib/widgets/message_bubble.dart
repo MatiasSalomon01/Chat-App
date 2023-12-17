@@ -32,7 +32,7 @@ class _MessageBubbleState extends State<MessageBubble> {
 
           chatScreenProvider.registerSelectedText(
             isTextSelected,
-            widget.message.id,
+            widget.message,
           );
         }
       },

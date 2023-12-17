@@ -64,76 +64,81 @@ class _TextFieldAndFloatingButtonState extends State<TextFieldAndFloatingButton>
     return Container(
       padding: const EdgeInsets.only(left: 8),
       margin: const EdgeInsets.symmetric(vertical: 5),
-      height: 45,
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Expanded(
-            child: Focus(
-              child: TextFormField(
-                controller: _controller,
-                cursorColor: green,
-                keyboardType: TextInputType.multiline,
-                autofocus: true,
-                style: const TextStyle(color: grey, fontSize: 18, height: 1.3),
-                decoration: InputDecoration(
-                  contentPadding: EdgeInsets.zero,
-                  prefixIcon: const Icon(Icons.emoji_emotions_rounded),
-                  prefixIconColor: grey,
-                  suffixIconColor: grey,
-                  suffixIcon: AnimatedContainer(
-                    duration: const Duration(milliseconds: 150),
-                    width: hasText ? 45 : 80,
-                    color: transparent,
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        AnimatedPositioned(
-                          duration: const Duration(milliseconds: 150),
-                          right: hasText ? -40 : 0,
-                          child: Padding(
-                            padding: const EdgeInsets.only(right: 15),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                const Icon(Icons.share),
-                                horizontalSpace(15),
-                                const Icon(Icons.camera_alt),
-                              ],
-                            ),
+          Focus(
+            child: TextFormField(
+              controller: _controller,
+              cursorColor: green,
+              keyboardType: TextInputType.multiline,
+              autofocus: true,
+              style: const TextStyle(color: grey, fontSize: 18, height: 1.3),
+              decoration: InputDecoration(
+                constraints: BoxConstraints(
+                    maxHeight: 45,
+                    maxWidth: MediaQuery.of(context).size.width * .83),
+                contentPadding: EdgeInsets.zero,
+                prefixIcon: const Icon(Icons.emoji_emotions_rounded),
+                prefixIconColor: grey,
+                suffixIconColor: grey,
+                suffixIcon: AnimatedContainer(
+                  duration: const Duration(milliseconds: 150),
+                  width: hasText ? 45 : 80,
+                  color: transparent,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      AnimatedPositioned(
+                        duration: const Duration(milliseconds: 150),
+                        right: hasText ? -40 : 0,
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 15),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              const Icon(Icons.share),
+                              horizontalSpace(15),
+                              const Icon(Icons.camera_alt),
+                            ],
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                  hintStyle:
-                      const TextStyle(color: grey, fontSize: 18, height: 1.3),
-                  hintText: 'Mensaje',
-                  fillColor: primary,
-                  filled: true,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(50),
-                    borderSide: BorderSide.none,
-                  ),
+                ),
+                hintStyle:
+                    const TextStyle(color: grey, fontSize: 18, height: 1.3),
+                hintText: 'Mensaje',
+                fillColor: primary,
+                filled: true,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(50),
+                  borderSide: BorderSide.none,
                 ),
               ),
             ),
           ),
-          FloatingActionButton(
-            onPressed: () async => hasText ? await sendMessage() : {},
-            backgroundColor: greenAccent3,
-            elevation: 0,
-            child: AnimatedBuilder(
-              animation: _scaleController,
-              builder: (context, child) {
-                return Transform.scale(
-                  scale:
-                      _scaleController.isDismissed ? 1 : _scaleAnimation.value,
-                  child: Icon(
-                    hasText ? Icons.send : Icons.keyboard_voice_rounded,
-                  ),
-                );
-              },
+          SizedBox(
+            height: 45,
+            child: FloatingActionButton(
+              onPressed: () async => hasText ? await sendMessage() : {},
+              backgroundColor: greenAccent3,
+              elevation: 0,
+              child: AnimatedBuilder(
+                animation: _scaleController,
+                builder: (context, child) {
+                  return Transform.scale(
+                    scale: _scaleController.isDismissed
+                        ? 1
+                        : _scaleAnimation.value,
+                    child: Icon(
+                      hasText ? Icons.send : Icons.keyboard_voice_rounded,
+                    ),
+                  );
+                },
+              ),
             ),
           )
         ],
