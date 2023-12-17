@@ -1,3 +1,4 @@
+export 'package:chat_app_frontend/widgets/custom_material_button.dart';
 export 'package:chat_app_frontend/widgets/message_bubble.dart';
 export 'package:chat_app_frontend/widgets/text_field_and_floatingbutton.dart';
 export 'package:chat_app_frontend/widgets/chat_messages.dart';

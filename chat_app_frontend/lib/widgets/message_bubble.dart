@@ -37,7 +37,7 @@ class _MessageBubbleState extends State<MessageBubble> {
         }
       },
       child: Container(
-        color: isTextSelected ? white.withOpacity(.2) : transparent,
+        color: isTextSelected ? userGreen.withOpacity(.2) : transparent,
         child: Stack(
           children: [
             Column(
