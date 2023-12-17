@@ -54,7 +54,7 @@ class _MessageBubbleState extends State<MessageBubble> {
                       color: widget.isMe ? userGreen : primary,
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: Row(
+                    child: Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
@@ -69,25 +69,36 @@ class _MessageBubbleState extends State<MessageBubble> {
                               horizontal: 10,
                               vertical: 5,
                             ),
-                            child: Text(
-                              widget.message.text,
-                              maxLines: 10,
+                            child: Text.rich(
+                              TextSpan(
+                                text: widget.message.text,
+                                children: [
+                                  const TextSpan(text: '  '),
+                                  TextSpan(
+                                    text: widget.message.createdAt.getHour(),
+                                    style: TextStyle(
+                                      color: white.withOpacity(.6),
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ],
+                              ),
                               style:
                                   const TextStyle(color: white, fontSize: 14.5),
                             ),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 5),
-                          child: Text(
-                            widget.message.createdAt.getHour(),
-                            style: TextStyle(
-                              color: white.withOpacity(.6),
-                              fontSize: 12,
-                            ),
-                          ),
-                        ),
-                        horizontalSpace(10),
+                        // Padding(
+                        //   padding: const EdgeInsets.only(bottom: 0),
+                        //   child: Text(
+                        //     widget.message.createdAt.getHour(),
+                        // style: TextStyle(
+                        //   color: white.withOpacity(.6),
+                        //   fontSize: 12,
+                        // ),
+                        //   ),
+                        // ),
+                        // horizontalSpace(10),
                       ],
                     ),
                   ),
